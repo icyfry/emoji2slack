@@ -8,16 +8,9 @@
     <pluginGroup>com.atlassian.maven.plugins</pluginGroup>
   </pluginGroups>
 
-  <proxies>
-  </proxies>
-
-  <servers>
-   
-  </servers>
-
-  <mirrors>
-   
-  </mirrors>
+  <proxies></proxies>
+  <servers></servers>
+  <mirrors></mirrors>
 
   <profiles>
     
@@ -28,7 +21,9 @@
       </activation>
 
       <repositories>
+
         <repository>
+          
           <id>atlassian-public</id>
           <url>https://maven.atlassian.com/repository/public</url>
           <snapshots>
@@ -41,7 +36,8 @@
             <checksumPolicy>warn</checksumPolicy>
           </releases>
         </repository>
-       <repository>
+
+        <repository>
          <id>atlassian-plugin-sdk</id>
           <url>file://${env.ATLAS_HOME}/repository</url>
           <snapshots>
@@ -52,6 +48,7 @@
             <checksumPolicy>warn</checksumPolicy>
           </releases>
         </repository>
+
       </repositories>
 
       <pluginRepositories>
@@ -80,8 +77,8 @@
         </pluginRepository>
       </pluginRepositories>
       <properties>
-        <downloadSources>true</downloadSources>
-        <downloadJavadocs>true</downloadJavadocs>
+        <downloadSources>false</downloadSources>
+        <downloadJavadocs>false</downloadJavadocs>
       </properties>
    </profile>
   </profiles>
