@@ -8,8 +8,7 @@ import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.sal.api.ApplicationProperties;
 
 import io.icyfry.bitbucket.e2s.api.Emoji2SlackComponent;
-import io.icyfry.bitbucket.e2s.bot.Emoji2SlackBot;
-import me.ramswaroop.jbot.core.slack.Bot;
+import io.icyfry.bitbucket.e2s.impl.bot.Emoji2SlackBot;
 
 @ExportAsService({ Emoji2SlackComponent.class })
 @Named("Emoji2SlackComponent")
@@ -26,7 +25,7 @@ public class Emoji2SlackComponentImpl implements Emoji2SlackComponent {
     }
 
     @Override
-    public Bot getBot() {
+    public Emoji2SlackBot getBot() {
         if(bot == null) {
             bot = new Emoji2SlackBot();
         }

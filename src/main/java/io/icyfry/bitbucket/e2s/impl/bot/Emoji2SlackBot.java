@@ -1,11 +1,11 @@
-package io.icyfry.bitbucket.e2s.bot;
+package io.icyfry.bitbucket.e2s.impl.bot;
+
+import com.atlassian.plugin.spring.scanner.annotation.Profile;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Profile;
 import me.ramswaroop.jbot.core.common.JBot;
 import me.ramswaroop.jbot.core.slack.Bot;
-
 
 @JBot
 @Profile("slack")

@@ -8,7 +8,7 @@
     <packaging>atlassian-plugin</packaging>
 
     <name>emoji2slack</name>
-    <description>plugin for Atlassian Bitbucket Server</description>
+    <description>emoji2slack plugin for Atlassian Bitbucket Server</description>
 
     <organization>
         <name>IcyFry</name>
@@ -16,11 +16,9 @@
     </organization>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <amps.version>8.0.2</amps.version>
-        <bitbucket.version>5.16.0</bitbucket.version>
+        <bitbucket.version>6.5.1</bitbucket.version>
         <bitbucket.data.version>${bitbucket.version}</bitbucket.data.version>
         <atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
         <atlassian.spring.scanner.version>2.1.7</atlassian.spring.scanner.version>
@@ -122,6 +120,10 @@
                 <version>${amps.version}</version>
                 <extensions>true</extensions>
                 <configuration>
+                    <extractDependencies>true</extractDependencies>
+                    <allowGoogleTracking>false</allowGoogleTracking>
+                    <enableQuickReload>true</enableQuickReload>
+                    <enableFastdev>false</enableFastdev>
                     <products>
                         <product>
                             <id>bitbucket</id>
@@ -141,8 +143,7 @@
                         <!-- Add package import here -->
                         <Import-Package>
                             org.springframework.osgi.*;resolution:="optional",
-                            org.eclipse.gemini.blueprint.*;resolution:="optional",
-                            *
+                            org.eclipse.gemini.blueprint.*;resolution:="optional"
                         </Import-Package>
 
                         <!-- Ensure plugin is Spring powered -->
