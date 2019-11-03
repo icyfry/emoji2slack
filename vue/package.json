@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "prepare-for-maven": "copyfiles ./dist/**/* ../src/main/resources/vue/",
-    "clean": "vue-cli-service clean"
+    "clean": "echo 'clean'"
   },
   "dependencies": {
     "@atlassian/aui": "^8.5.1",

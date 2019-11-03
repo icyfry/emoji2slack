@@ -261,7 +261,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                        <workingDirectory>vue</workingDirectory>
+                    <workingDirectory>vue</workingDirectory>
                     <environmentVariables>
                         <!-- The following parameters create an NPM sandbox for CI -->
                         <NPM_CONFIG_PREFIX>${basedir}/npm</NPM_CONFIG_PREFIX>
