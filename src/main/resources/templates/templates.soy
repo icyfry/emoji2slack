@@ -1,0 +1,25 @@
+{namespace emoji2slack}
+
+/**
+ * @param repository Repository
+ * @param contextPath Context
+ */
+{template .repositorySettings}
+<html>
+<head>
+    <meta name="decorator" content="bitbucket.repository.settings">
+    <meta name="projectKey" content="{$repository.project.key}">
+    <meta name="repositorySlug" content="{$repository.slug}">
+    <meta name="activeTab" content="repository-settings-plugin-tab">
+    <link href={$contextPath}/download/resources/io.icyfry.bitbucket.emoji2slack:emoji2slack-resources/app.js rel=preload as=script>
+    <link href={$contextPath}/download/resources/io.icyfry.bitbucket.emoji2slack:emoji2slack-resources/app.css rel=preload as=style>
+    <link href={$contextPath}/download/resources/io.icyfry.bitbucket.emoji2slack:emoji2slack-resources/app.css rel=stylesheet>
+    // {webResourceManager_requireResource('io.icyfry.bitbucket.emoji2slack:emoji2slack-resources')}
+    <title>{$repository.slug} / Emojis Slack Integration</title>
+</head>
+<body>
+    <div id=app data-repository-id="{$repository.id}"></div>
+    <script src={$contextPath}/download/resources/io.icyfry.bitbucket.emoji2slack:emoji2slack-resources/app.js></script>
+</body>
+</html>
+{/template}
