@@ -1,4 +1,5 @@
 <atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    
     <plugin-info>
         <description>${project.description}</description>
         <version>${project.version}</version>
@@ -13,12 +14,43 @@
     <!-- add our web resources -->
     <web-resource key="emoji2slack-resources" name="emoji2slack Web Resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>
-        
         <resource type="download" name="emoji2slack.css" location="/css/emoji2slack.css"/>
         <resource type="download" name="emoji2slack.js" location="/js/emoji2slack.js"/>
         <resource type="download" name="images/" location="/images"/>
 
+        <!-- Vue.js ressources -->
+        <resource type="download" name="app.css" location="/vue/dist/css/app.css"/>
+        <resource type="download" name="about.js" location="/vue/dist/js/about.js"/>
+        <resource type="download" name="app.js" location="/vue/dist/js/app.js"/>
+        <resource type="download" name="about.js.map" location="/vue/dist/js/about.js.map"/>
+        <resource type="download" name="app.js.map" location="/vue/dist/js/app.js.map"/>
+        
         <context>emoji2slack</context>
     </web-resource>
+
+    <client-resource key="emoji2slack-soy" name="Soy Templates">
+        <dependency>com.atlassian.auiplugin:aui-experimental-soy-templates</dependency>
+        <directory location="/templates/"/>
+    </client-resource>
+
+    <ao key="ao-module">
+        <description>The module configuring the Active Objects service used by this plugin</description>
+        <entity>io.icyfry.bitbucket.e2s.data.ConfigurationEntity</entity>
+    </ao>
+
+    <rest key="emoji2slack-rest" path="/emoji2slack" version="1.0">
+        <description>Provides plugin services</description>
+    </rest>
+
+    <servlet name="emoji2slack Servlet" key="emoji2slack-servlet" class="io.icyfry.bitbucket.e2s.web.Emoji2SlackServlet">
+        <description key="repository-servlet.description">The emoji2slack Servlet Plugin</description>
+        <url-pattern>/emoji2slack/*</url-pattern>
+    </servlet>
+
+    <web-item key="emoji2slack-repository-settings-tab" name="Repository settings navigation tab" section="bitbucket.repository.settings.panel/repository-workflow-section" weight="50">
+        <label>Emojis Slack Integration</label>
+        <link>/plugins/servlet/emoji2slack/${repository.project.key}/${repository.slug}/settings</link>
+        <!--<tooltip>emoji2slack</tooltip>-->
+    </web-item>
     
 </atlassian-plugin>

@@ -16,6 +16,8 @@
     </organization>
 
     <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <amps.version>8.0.2</amps.version>
         <bitbucket.version>6.5.1</bitbucket.version>
@@ -26,6 +28,9 @@
         <jsr311.version>1.1.1</jsr311.version>
         <plugin.testrunner.version>2.0.1</plugin.testrunner.version>
         <me.ramswaroop.jbot.version>4.1.0</me.ramswaroop.jbot.version>
+        <com.vdurmont.emoji-java.version>5.1.1</com.vdurmont.emoji-java.version>
+        <com.atlassian.bitbucket.server.emoticons>5.16.2</com.atlassian.bitbucket.server.emoticons>
+        <ao.version>1.2.3</ao.version>
     </properties>
 
     <dependencyManagement>
@@ -39,7 +44,13 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    
     <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.atlassian.bitbucket.server</groupId>
             <artifactId>bitbucket-api</artifactId>
@@ -51,19 +62,30 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.atlassian.bitbucket.server</groupId>
+            <artifactId>bitbucket-util</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.plugins</groupId>
+            <artifactId>atlassian-plugins-webfragment</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.atlassian.plugin</groupId>
             <artifactId>atlassian-spring-scanner-annotation</artifactId>
             <version>${atlassian.spring.scanner.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.atlassian.sal</groupId>
-            <artifactId>sal-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
+            <groupId>com.atlassian.plugin</groupId>
+            <artifactId>atlassian-spring-scanner-runtime</artifactId>
+            <version>${atlassian.spring.scanner.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -73,8 +95,14 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.activeobjects</groupId>
+            <artifactId>activeobjects-plugin</artifactId>
+            <version>${ao.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -84,14 +112,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.atlassian.plugins</groupId>
             <artifactId>atlassian-plugins-osgi-testrunner</artifactId>
             <version>${plugin.testrunner.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -100,20 +129,147 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>me.ramswaroop.jbot</groupId>
-            <artifactId>jbot</artifactId>
-            <version>${me.ramswaroop.jbot.version}</version>
+            <groupId>com.atlassian.bitbucket.server</groupId>
+            <artifactId>bitbucket-emoticons</artifactId>
+            <version>${com.atlassian.bitbucket.server.emoticons}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
+            <groupId>com.hubspot.slack</groupId>
+            <artifactId>slack-base</artifactId>
+            <version>1.3</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.hubspot.slack</groupId>
+            <artifactId>slack-java-client</artifactId>
+            <version>1.3</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.sal</groupId>
+            <artifactId>sal-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.soy</groupId>
+            <artifactId>soy-template-renderer-api</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.3.2</version>
+                <executions>
+                    <execution>
+                        <id>npm install (initialize)</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm install (clean)</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>pre-clean</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm config list (validate)</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>validate</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>config</argument>
+                                <argument>list</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm run build (compile)</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>build</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm run prepare-for-maven</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>prepare-for-maven</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm run clean (clean)</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>clean</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>clean</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <workingDirectory>vue</workingDirectory>
+                    <environmentVariables>
+                        <!-- The following parameters create an NPM sandbox for CI -->
+                        <NPM_CONFIG_PREFIX>${basedir}/npm</NPM_CONFIG_PREFIX>
+                        <NPM_CONFIG_CACHE>${NPM_CONFIG_PREFIX}/cache</NPM_CONFIG_CACHE>
+                        <NPM_CONFIG_TMP>${project.build.directory}/npmtmp</NPM_CONFIG_TMP>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>bitbucket-maven-plugin</artifactId>
@@ -124,6 +280,7 @@
                     <allowGoogleTracking>false</allowGoogleTracking>
                     <enableQuickReload>true</enableQuickReload>
                     <enableFastdev>false</enableFastdev>
+                    <compressResources>false</compressResources>
                     <products>
                         <product>
                             <id>bitbucket</id>
@@ -137,17 +294,33 @@
 
                         <!-- Add package to export here -->
                         <Export-Package>
-                            io.icyfry.bitbucket.e2s.api,
+                            io.icyfry.bitbucket.e2s.api.*,
+                            com.hubspot.slack.client.models.*,
                         </Export-Package>
 
                         <!-- Add package import here -->
                         <Import-Package>
+                            com.atlassian.activeobjects.external;resolution:="optional",
+                            net.java.ao.*;resolution:="optional",
                             org.springframework.osgi.*;resolution:="optional",
-                            org.eclipse.gemini.blueprint.*;resolution:="optional"
+                            org.eclipse.gemini.blueprint.*;resolution:="optional",
+                            com.google.protobuf.*;resolution:="optional",
+                            org.apache.tomcat.jni.*;resolution:="optional",
+                            org.eclipse.jetty.npn.*;resolution:="optional",
+                            org.glassfish.grizzly.*;resolution:="optional",
+                            org.jboss.marshalling.*;resolution:="optional",
+                            org.joda.convert.*;resolution:="optional",
+                            sun.misc.*;resolution:="optional",
+                            sun.security.util.*;resolution:="optional",
+                            sun.security.x509.*;resolution:="optional",
+                            com.atlassian.soy.renderer.SoyTemplateRenderer;resolution:="optional",
+                            org.slf4j.*;resolution:="optional",
+                            *
                         </Import-Package>
 
                         <!-- Ensure plugin is Spring powered -->
                         <Spring-Context>*</Spring-Context>
+                        
                     </instructions>
                 </configuration>
             </plugin>

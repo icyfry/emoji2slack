@@ -3,7 +3,7 @@ package it.io.icyfry.bitbucket.e2s;
 import static org.junit.Assert.assertNotNull;
 
 import com.atlassian.plugins.osgi.test.AtlassianPluginsTestRunner;
-import com.atlassian.sal.api.ApplicationProperties;
+//import com.atlassian.sal.api.ApplicationProperties;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,15 +11,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 //import org.springframework.web.socket.WebSocketSession;
 
-import io.icyfry.bitbucket.e2s.api.Emoji2SlackComponent;
-import io.icyfry.bitbucket.e2s.impl.bot.Emoji2SlackBot;
+import io.icyfry.bitbucket.e2s.api.bot.SlackBot;
+
 //import me.ramswaroop.jbot.core.slack.SlackService;
 
 //@RunWith(AtlassianPluginsTestRunner.class)
-public class Emoji2SlackComponentWiredTest
+public class Emoji2SlackWiredTest
 {
-    private final ApplicationProperties applicationProperties;
-    private final Emoji2SlackComponent myPluginComponent;
+    //private final ApplicationProperties applicationProperties;
 /*
     @Mock
     private WebSocketSession session;
@@ -28,12 +27,11 @@ public class Emoji2SlackComponentWiredTest
     private SlackService slackService;
 */
     @InjectMocks
-    private Emoji2SlackBot bot;
+    private SlackBot bot;
 
-    public Emoji2SlackComponentWiredTest(ApplicationProperties applicationProperties,Emoji2SlackComponent myPluginComponent)
+    public Emoji2SlackWiredTest(/*ApplicationProperties applicationProperties*/)
     {
-        this.applicationProperties = applicationProperties;
-        this.myPluginComponent = myPluginComponent;
+        //this.applicationProperties = applicationProperties;
     }
 /*
     @Test
