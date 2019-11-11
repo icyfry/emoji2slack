@@ -119,6 +119,11 @@ public class Emoji2SlackServiceImpl implements Emoji2SlackService {
     @Override
     public void saveEmojiConfiguration(String channelId, String emojiShortcut, int repositoryId) throws Emoji2SlackException {
 
+        // Preconditions
+        checkNotNull(channelId);
+        checkNotNull(emojiShortcut);
+        checkNotNull(repositoryId);
+
         try {
 
             final EmojiConfigEntity entity = ao.create(EmojiConfigEntity.class, new DBParam("CHANNEL_ID", channelId));
