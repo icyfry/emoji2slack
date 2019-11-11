@@ -15,8 +15,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import io.icyfry.bitbucket.e2s.api.BotService;
-import io.icyfry.bitbucket.e2s.api.Configuration;
+import io.icyfry.bitbucket.e2s.api.EmojiConfiguration;
+import io.icyfry.bitbucket.e2s.api.bot.SlackBotService;
 import io.icyfry.bitbucket.e2s.impl.Emoji2SlackServiceImpl;
 
 /**
@@ -31,7 +31,7 @@ public class Emoji2SlackUnitTest {
     private ApplicationProperties applicationProperties;
 
     @Mock
-    private BotService botService;
+    private SlackBotService botService;
 
     @Mock
     private EmoticonService emoticonService;
@@ -42,27 +42,39 @@ public class Emoji2SlackUnitTest {
     }
 
     @Test
-    public void testFindMatchingConfigurationForComment() {
+    public void testFindMatchingConfigurationForComment() throws Exception{
 
         Emoji2SlackServiceImpl service = new Emoji2SlackServiceImpl(ao,applicationProperties,botService,emoticonService);
 
         // Mock comment
-        MockComment testComment = new MockComment("👏 Hello");
+        MockComment testComment = new MockComment(":clap: Hello");
+        MockComment testComment2 = new MockComment("👏 Hello");
 
         // Mock configuration
         Emoticon emoticon = new MockEmoticon("clap","👏");
 
-        Collection<Configuration> configurations = new ArrayList<Configuration>();
+        Collection<EmojiConfiguration> configurations = new ArrayList<EmojiConfiguration>();
         configurations.add(
-            new Configuration("001", emoticon)
+            new EmojiConfiguration("x", emoticon)
         );
 
         // Look if configuration is matching
-        Configuration configurationFound = service.findMatchingConfigurationForComment(testComment,configurations);
+        
+        // Comment 1
+        EmojiConfiguration configurationFound = service.findMatchingEmojiConfigurationForComment(testComment,configurations);
+
+        // Comment 2
+        EmojiConfiguration configurationFound2 = service.findMatchingEmojiConfigurationForComment(testComment2,configurations);
         
         assertNotNull(configurationFound);
         assertEquals("👏",configurationFound.getEmoji().getValue().get());
-        assertEquals("001",configurationFound.getChannelId());
+        assertEquals("clap",configurationFound.getEmoji().getShortcut());
+        assertEquals("x",configurationFound.getChannelId());
+
+        assertNotNull(configurationFound2);
+        assertEquals("👏",configurationFound2.getEmoji().getValue().get());
+        assertEquals("clap",configurationFound2.getEmoji().getShortcut());
+        assertEquals("x",configurationFound2.getChannelId());
 
     }
     
