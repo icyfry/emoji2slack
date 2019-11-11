@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import RepositoryEmojisConfigurations from './views/RepositoryEmojisConfigurations.vue';
+//import RepositoryEmojisConfigurations from './views/RepositoryEmojisConfigurations.vue';
+//import GlobalConfigurations from './views/GlobalConfigurations.vue';
+import About from './views/About.vue';
 
 Vue.use(Router);
 
@@ -8,16 +10,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'repository',
-      component: RepositoryEmojisConfigurations,
+      name: 'about',
+      component: About,
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+      path: '/repository',
+      name: 'repository',
+      component: () => import('./views/RepositoryEmojisConfigurations.vue'),
+    },
+    {
+      path: '/global',
+      name: 'global',
+      component: () => import('./views/GlobalConfiguration.vue'),
     },
   ],
 });

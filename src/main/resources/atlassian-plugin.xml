@@ -20,9 +20,7 @@
 
         <!-- Vue.js ressources -->
         <resource type="download" name="app.css" location="/vue/dist/css/app.css"/>
-        <resource type="download" name="about.js" location="/vue/dist/js/about.js"/>
         <resource type="download" name="app.js" location="/vue/dist/js/app.js"/>
-        <resource type="download" name="about.js.map" location="/vue/dist/js/about.js.map"/>
         <resource type="download" name="app.js.map" location="/vue/dist/js/app.js.map"/>
         
         <context>emoji2slack</context>

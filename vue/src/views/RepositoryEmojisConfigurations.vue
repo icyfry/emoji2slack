@@ -78,7 +78,7 @@ export default class RepositoryEmojisConfigurations extends Vue {
   /**
    * Constructor
    */
-  public created() {
+  public mounted() {
     this.callConfigurations();
     this.callEmoji();
   }

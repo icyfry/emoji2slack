@@ -45,7 +45,7 @@ export default class GlobalConfiguration extends Vue {
   /**
    * Constructor
    */
-  public created() {
+  public mounted() {
     this.callConfiguration();
   }
 
