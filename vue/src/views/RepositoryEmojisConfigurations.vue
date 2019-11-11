@@ -16,6 +16,7 @@
       <ul v-if="configurations && configurations.length">
         <li v-bind:key="item" v-for="item in configurations">
           <EmojiConfiguration :channelId="item.channelId" :emoji="item.emoji" />
+          <va-button @click="deleteConfiguration(item.id)">delete</va-button>
         </li>
       </ul>
     </div>
@@ -92,7 +93,7 @@ export default class RepositoryEmojisConfigurations extends Vue {
       this.configurations = response.data.configurations;
     })
     .catch((e) => {
-      this.errors.push(e);
+      this.errors.push(e.message);
     });
   }
 
@@ -106,7 +107,7 @@ export default class RepositoryEmojisConfigurations extends Vue {
       this.emoji = this.emojis[0];
     })
     .catch((e) => {
-      this.errors.push(e);
+      this.errors.push(e.message);
     });
   }
 
@@ -124,7 +125,21 @@ export default class RepositoryEmojisConfigurations extends Vue {
       this.callConfigurations();
     })
     .catch((e) => {
-      this.errors.push(e);
+      this.errors.push(e.message);
+    });
+  }
+
+  /**
+   * Rest call to delete a configuration
+   */
+  public deleteConfiguration(id) {
+    axios.delete(AJS.contextPath() + `/rest/emoji2slack/1.0/emojis/configuration/` + id)
+    .then((response) => {
+      this.infos.push(`Configuration deleted`);
+      this.callConfigurations();
+    })
+    .catch((e) => {
+      this.errors.push(e.message);
     });
   }
 

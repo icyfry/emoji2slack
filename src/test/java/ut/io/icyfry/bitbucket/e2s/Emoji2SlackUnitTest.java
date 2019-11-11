@@ -59,7 +59,7 @@ public class Emoji2SlackUnitTest {
 
         Collection<EmojiConfiguration> configurations = new ArrayList<EmojiConfiguration>();
         configurations.add(
-            new EmojiConfiguration("x", emoticon)
+            new EmojiConfiguration(0, "x", emoticon)
         );
 
         // Look if configuration is matching

@@ -58,7 +58,7 @@ export default class GlobalConfiguration extends Vue {
       this.botAccessToken = response.data.botAccessToken;
     })
     .catch((e) => {
-      this.errors.push(e);
+      this.errors.push(e.message);
     });
   }
 
@@ -74,7 +74,7 @@ export default class GlobalConfiguration extends Vue {
       this.callConfiguration();
     })
     .catch((e) => {
-      this.errors.push(e);
+      this.errors.push(e.message);
     });
   }
 

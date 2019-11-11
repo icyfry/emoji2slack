@@ -70,4 +70,10 @@ public interface Emoji2SlackService
      */
     public GlobalConfiguration getConfiguration() throws Emoji2SlackException;
 
+    /**
+     * Delete a emoji configuration
+     * @param id the id of the configuration to delete
+     */
+	public void deleteEmojiConfiguration(int id) throws Emoji2SlackException;
+
 }

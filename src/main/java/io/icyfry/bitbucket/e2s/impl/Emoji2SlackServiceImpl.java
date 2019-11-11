@@ -95,8 +95,11 @@ public class Emoji2SlackServiceImpl implements Emoji2SlackService {
      * @return the model object
      */
     private EmojiConfiguration ConfigurationEntityToModel(EmojiConfigEntity entity) {
-        return new EmojiConfiguration(entity.getChannelId(),
-                this.getAllEmojisAvailables().get(entity.getEmojiShortcut()));
+        return new EmojiConfiguration(
+            entity.getID(),
+            entity.getChannelId(),
+            this.getAllEmojisAvailables().get(entity.getEmojiShortcut())
+        );
     }
 
     /**
@@ -148,7 +151,7 @@ public class Emoji2SlackServiceImpl implements Emoji2SlackService {
     @Override
     public Collection<EmojiConfiguration> getEmojisConfigurationsByRepositoryId(int repositoryId) {
         List<EmojiConfigEntity> entities = newArrayList(
-                ao.find(EmojiConfigEntity.class, Query.select().where("REPOSITORY_ID = " + repositoryId + "")));
+                ao.find(EmojiConfigEntity.class, Query.select().where("REPOSITORY_ID = " + repositoryId)));
         return ConfigurationEntityToModel(entities);
     }
 
@@ -201,6 +204,17 @@ public class Emoji2SlackServiceImpl implements Emoji2SlackService {
 
         return configuration;
 
+    }
+
+    @Override
+    public void deleteEmojiConfiguration(int id) throws Emoji2SlackException {
+        List<EmojiConfigEntity> entities = newArrayList(ao.find(EmojiConfigEntity.class, Query.select().where("ID = " + id)));
+        if(entities.size() == 1){
+            ao.delete(entities.get(0));
+        }
+        else{
+            throw new Emoji2SlackException("Error retriving an emoji configuration with id "+id + ", "+entities.size()+" results founds");
+        }
     }
 
 }
