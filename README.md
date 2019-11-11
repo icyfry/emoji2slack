@@ -1,34 +1,35 @@
 # emoji2slack bitbucket plugin
 
-> NOT FUNCTIONAL YET 😅
-
 This plugin send messages to slack when an emoji is used in comments in Bitbucket.
 
-[emoji-list on unicode.org](http://unicode.org/emoji/charts/full-emoji-list.html)
+1. Configure the token (xoxb-....) of a bot installed on your Slack channel in the global settings of the plugin (bitbucket/plugins/servlet/emoji2slack/settings)
+2. Link a emoji to a channel in a repository
+3. Write a message on a PR containing the emoji, a message will be send to the channel configured 
 
+> Version 1.0.0 currently under work
 
 ## UI
 
-<img src="./doc/capture_1.png" />
+🎨 The ui is not ready yet
 
 ## API
 
 Return the list of all emojis
 ```
 GET
-/bitbucket/rest/emoji2slack/1.0/emojis
+/bitbucket/rest/emoji2slack/latest/emojis
 ```
 
 Return the emojis configurations related to the plugin on a specific repository
 ```
 GET
-/bitbucket/rest/emoji2slack/1.0/configurations/list?repositoryid={id}
+/bitbucket/rest/emoji2slack/latest/emojis/configurations/{repositoryid}
 ```
 
 Add a new emoji configuration
 ```
 POST
-/bitbucket/rest/emoji2slack/1.0/configurations/add
+/bitbucket/rest/emoji2slack/latest/emojis/configurations/add
 ```
 
 ```json
@@ -39,14 +40,44 @@ POST
 }
 ```
 
+Delete a emoji configuration (with internal id)
+```
+DELETE
+/bitbucket/rest/emoji2slack/latest/emojis/configurations/{id}
+```
 
+Retrive or modify global configuration of the plugin
+```
+GET or POST
+/bitbucket/rest/emoji2slack/latest/configuration
+```
+
+```json
+{
+    "botAccessToken": "string"
+}
+```
+
+## Pages
+
+Global configuration page
+```
+bitbucket/plugins/servlet/emoji2slack/settings
+```
+
+Repository configuration page
+```
+bitbucket/plugins/servlet/emoji2slack/project/{PROJECT}/{REPOSITORY}/settings
+```
 
 ## Projects used
 
 * [slack-client](https://github.com/HubSpot/slack-client)
+* [vue-aui](https://spartez.github.io/vue-aui/#/)
 
 ## Developement
 
+> ⚠️ The documentation bellow will be useful if you plan to contribute to the development of the plugin
 
 ### Configuration
 
@@ -80,9 +111,6 @@ Install the plugin
 atlas-install-plugin
 ```
 
-https://bitbucket.org/DACOFFEY/wiki/wiki/BITBUCKET/EMOJI/Emoji?_ga=2.194310062.2040885428.1572033028-866815006.1570574180
-
-
 ### IDE (VSCODE)
 
 * https://code.visualstudio.com/docs/languages/java
@@ -108,3 +136,7 @@ To be able to connect your IDE to the java instance runnig , you have to launch 
 atlas-debug
 ```
 > ⚠ Debuging is consuming more ressources than standard launch (with ``atlas-run``)
+
+## References
+
+* [emoji-list on unicode.org](http://unicode.org/emoji/charts/full-emoji-list.html)

@@ -12,8 +12,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import io.icyfry.bitbucket.e2s.api.BotService;
 import io.icyfry.bitbucket.e2s.api.bot.SlackBotException;
+import io.icyfry.bitbucket.e2s.api.bot.SlackBotService;
 
 /**
  * UTs related to the Emoji2Slack plugin (bot)
@@ -24,7 +24,7 @@ public class Emoji2SlackBotUnitTest {
 
     @Mock private ApplicationProperties applicationProperties;
 
-    @Mock private BotService botService;
+    @Mock private SlackBotService botService;
     
     @Before
     public void init() {

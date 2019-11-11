@@ -7,7 +7,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 /**
  * A slack channel configuration
  */
-public class Configuration {
+public class EmojiConfiguration {
+
+    // id of the configuration (if stored)
+    @JsonProperty(required=false)
+    private int id;
 
     // emoji linked to the channel
     @JsonSerialize(using = EmoticonSerializer.class)
@@ -17,12 +21,13 @@ public class Configuration {
     @JsonProperty
     private String channelId;
 
-    public Configuration(String channelId, Emoticon emoji) {
+    public EmojiConfiguration(int id, String channelId, Emoticon emoji) {
+        this.id = id;
         this.emoji = emoji;
         this.channelId = channelId;
     }
 
-    public Emoticon getEmoji() {
+	public Emoticon getEmoji() {
         return emoji;
     }
 
@@ -36,6 +41,14 @@ public class Configuration {
 
     public void setChannelId(String channelId) {
         this.channelId = channelId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
 }
