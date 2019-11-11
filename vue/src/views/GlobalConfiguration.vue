@@ -62,6 +62,22 @@ export default class GlobalConfiguration extends Vue {
     });
   }
 
+  /**
+   * Rest call to save global configuration
+   */
+  public saveConfiguration() {
+    axios.post(AJS.contextPath() + `/rest/emoji2slack/1.0/configuration`, {
+        botAccessToken: this.botAccessToken
+    })
+    .then((response) => {
+      this.infos.push(`Configuration saved`);
+      this.callConfiguration();
+    })
+    .catch((e) => {
+      this.errors.push(e);
+    });
+  }
+
 }
 </script>
 

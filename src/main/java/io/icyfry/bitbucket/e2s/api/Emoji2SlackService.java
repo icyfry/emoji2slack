@@ -60,12 +60,14 @@ public interface Emoji2SlackService
     /**
      * Save global configuration of the plugin
      * @param input the global configuration to save
+     * @throws Emoji2SlackException
      */
-    public void saveConfiguration(GlobalConfiguration input);
+    public void saveConfiguration(GlobalConfiguration input) throws Emoji2SlackException;
     
     /**
      * Return the global configuration of the plugin
+     * @throws Emoji2SlackException
      */
-    public GlobalConfiguration getConfiguration();
+    public GlobalConfiguration getConfiguration() throws Emoji2SlackException;
 
 }

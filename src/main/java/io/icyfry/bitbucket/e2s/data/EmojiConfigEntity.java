@@ -5,12 +5,12 @@ import net.java.ao.schema.Index;
 import net.java.ao.schema.Indexes;
 
 /**
- * Configuration element that link a channel to an emoji
+ * Link a channel to an emoji
  */
 @Indexes({
     @Index(name = "id", methodNames = {"getChannelId", "getRepositoryId"})
 })
-public interface ConfigurationEntity extends Entity
+public interface EmojiConfigEntity extends Entity
 {
 
     public String getChannelId();
