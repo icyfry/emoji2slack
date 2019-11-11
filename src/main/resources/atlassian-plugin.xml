@@ -42,23 +42,23 @@
 
     <servlet name="emoji2slack Repository Servlet" key="emoji2slack-repository-servlet" class="io.icyfry.bitbucket.e2s.web.Emoji2SlackRepositorySettingsServlet">
         <description key="repository-repository-servlet.description">The emoji2slack Servlet Plugin (repository)</description>
-        <url-pattern>/emoji2slack/r/*</url-pattern>
+        <url-pattern>/emoji2slack/project/*</url-pattern>
     </servlet>
 
     <servlet name="emoji2slack Global Servlet" key="emoji2slack-global-servlet" class="io.icyfry.bitbucket.e2s.web.Emoji2SlackGlobalSettingsServlet">
         <description key="repository-servlet.description">The emoji2slack Servlet Plugin (global)</description>
-        <url-pattern>/emoji2slack/g/*</url-pattern>
+        <url-pattern>/emoji2slack/*</url-pattern>
     </servlet>
     
     <web-item key="emoji2slack-repository-settings-tab" name="Repository settings navigation tab" section="bitbucket.repository.settings.panel/repository-workflow-section" weight="50">
         <label>Slack Integration (Emojis)</label>
-        <link>/plugins/servlet/emoji2slack/r/${repository.project.key}/${repository.slug}/settings</link>
+        <link>/plugins/servlet/emoji2slack/project/${repository.project.key}/${repository.slug}/settings</link>
         <!--<tooltip>emoji2slack</tooltip>-->
     </web-item>
 
     <web-item key="emoji2slack-global-settings-tab" name="Repository settings navigation tab" section="atl.admin/admin-plugins-section" weight="50">
         <label>Slack Integration (Emojis)</label>
-        <link>/plugins/servlet/emoji2slack/g/settings</link>
+        <link>/plugins/servlet/emoji2slack/settings</link>
         <!--<tooltip>emoji2slack</tooltip>-->
     </web-item>
     
