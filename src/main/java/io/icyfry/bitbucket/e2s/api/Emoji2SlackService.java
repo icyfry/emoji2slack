@@ -46,7 +46,7 @@ public interface Emoji2SlackService
      * @param emoji the emoji to link to the channel
      * @param repositoryId the repository related to the configuration
      */
-    public void saveEmojiConfiguration(String channelId, String emojiShortcut, int repositoryId);
+    public void saveEmojiConfiguration(String channelId, String emojiShortcut, int repositoryId) throws Emoji2SlackException;
    
     /**
      * Look if the comment contains an emoji linked to a channel in the plugin

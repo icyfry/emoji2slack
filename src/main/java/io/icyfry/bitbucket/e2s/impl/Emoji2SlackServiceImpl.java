@@ -19,10 +19,9 @@ import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.sal.api.ApplicationProperties;
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hubspot.slack.client.models.response.chat.ChatPostMessageResponse;
 
 import io.icyfry.bitbucket.e2s.api.Emoji2SlackException;
 import io.icyfry.bitbucket.e2s.api.Emoji2SlackService;
@@ -115,18 +114,29 @@ public class Emoji2SlackServiceImpl implements Emoji2SlackService {
     }
 
     @Override
-    public void saveEmojiConfiguration(String channelId, String emojiShortcut, int repositoryId) {
-        final EmojiConfigEntity entity = ao.create(EmojiConfigEntity.class, new DBParam("CHANNEL_ID", channelId));
-        entity.setEmojiShortcut(emojiShortcut);
-        entity.setRepositoryId(repositoryId);
-        entity.save();
+    public void saveEmojiConfiguration(String channelId, String emojiShortcut, int repositoryId) throws Emoji2SlackException {
+
         try {
-            botService.getBot(this).sendConfigurationMessage(this.ConfigurationEntityToModel(entity));
+
+            final EmojiConfigEntity entity = ao.create(EmojiConfigEntity.class, new DBParam("CHANNEL_ID", channelId));
+            
+            entity.setEmojiShortcut(emojiShortcut);
+            entity.setRepositoryId(repositoryId);
+            
+            // Try contacting the channel
+            ChatPostMessageResponse response = botService.getBot(this).sendConfigurationMessage(this.ConfigurationEntityToModel(entity));
+
+            if(response.isOk()){
+                entity.save();
+            }
+            else{
+                throw new Emoji2SlackException("Error sending message to Slack");
+            }
+
         } catch (SlackBotException e) {
-            // TODO Handle error
-        } catch (Emoji2SlackException e) {
-            // TODO Handle error
+            throw new Emoji2SlackException(e);
         }
+
     }
 
     @Override

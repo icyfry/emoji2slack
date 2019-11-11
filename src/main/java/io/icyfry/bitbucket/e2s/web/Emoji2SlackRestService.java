@@ -81,23 +81,30 @@ public class Emoji2SlackRestService {
     @POST
     @Path("emojis/configurations/add")
     public Response addConfiguration(RestInputAddEmojiConfiguration input) {
+        try {
 
-        emoji2SlackService.saveEmojiConfiguration(
-            input.getChannelId(), 
-            input.getEmojiShortcut(),
-            input.getRepositoryId()
-        );
+            emoji2SlackService.saveEmojiConfiguration(
+                input.getChannelId(), 
+                input.getEmojiShortcut(),
+                input.getRepositoryId()
+            );
 
-        return Response.ok("configuration saved").build();
+            return Response.ok("configuration saved").build();
+
+        } catch (Emoji2SlackException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
+        }
 
     }
 
     @POST
     @Path("configuration")
     public Response setConfiguration(RestInputSetGlobalConfiguration input) {
-        try {
+        try{
+            
             emoji2SlackService.saveConfiguration(input);
             return Response.ok("plugin global configuration saved").build();
+
         } catch (Emoji2SlackException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
         }
