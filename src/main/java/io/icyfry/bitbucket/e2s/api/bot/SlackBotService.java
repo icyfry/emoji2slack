@@ -1,12 +1,13 @@
-package io.icyfry.bitbucket.e2s.api;
+package io.icyfry.bitbucket.e2s.api.bot;
 
+import io.icyfry.bitbucket.e2s.api.Emoji2SlackService;
 import io.icyfry.bitbucket.e2s.api.bot.SlackBot;
 import io.icyfry.bitbucket.e2s.api.bot.SlackBotException;
 
 /**
  * Service class for slack bot related functions
  */
-public interface BotService
+public interface SlackBotService
 {
 
     /**
@@ -14,6 +15,6 @@ public interface BotService
      * @return the bot instance
      * @throws SlackBotException
      */
-    public SlackBot getBot() throws SlackBotException;
+    public SlackBot getBot(Emoji2SlackService emoji2SlackService) throws SlackBotException;
 
 }

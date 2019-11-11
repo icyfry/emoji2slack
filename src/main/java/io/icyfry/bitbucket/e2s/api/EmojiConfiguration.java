@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 /**
  * A slack channel configuration
  */
-public class Configuration {
+public class EmojiConfiguration {
 
     // emoji linked to the channel
     @JsonSerialize(using = EmoticonSerializer.class)
@@ -17,7 +17,7 @@ public class Configuration {
     @JsonProperty
     private String channelId;
 
-    public Configuration(String channelId, Emoticon emoji) {
+    public EmojiConfiguration(String channelId, Emoticon emoji) {
         this.emoji = emoji;
         this.channelId = channelId;
     }
