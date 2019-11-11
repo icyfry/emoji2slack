@@ -9,6 +9,7 @@ import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.bitbucket.emoticons.Emoticon;
 import com.atlassian.bitbucket.emoticons.EmoticonService;
 import com.atlassian.sal.api.ApplicationProperties;
+import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +37,9 @@ public class Emoji2SlackUnitTest {
     @Mock
     private EmoticonService emoticonService;
 
+    @Mock
+    private PluginSettingsFactory pluginSettingsFactory;
+
     @Before
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
@@ -44,7 +48,7 @@ public class Emoji2SlackUnitTest {
     @Test
     public void testFindMatchingConfigurationForComment() throws Exception{
 
-        Emoji2SlackServiceImpl service = new Emoji2SlackServiceImpl(ao,applicationProperties,botService,emoticonService);
+        Emoji2SlackServiceImpl service = new Emoji2SlackServiceImpl(ao,applicationProperties,botService,emoticonService,pluginSettingsFactory);
 
         // Mock comment
         MockComment testComment = new MockComment(":clap: Hello");
