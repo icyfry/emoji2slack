@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Configurations from './views/Configurations.vue';
+import RepositoryEmojisConfigurations from './views/RepositoryEmojisConfigurations.vue';
 
 Vue.use(Router);
 
@@ -8,8 +8,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'configurations',
-      component: Configurations,
+      name: 'repository',
+      component: RepositoryEmojisConfigurations,
     },
     {
       path: '/about',

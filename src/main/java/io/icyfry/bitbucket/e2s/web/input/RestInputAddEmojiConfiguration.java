@@ -1,8 +1,8 @@
-package io.icyfry.bitbucket.e2s.web;
+package io.icyfry.bitbucket.e2s.web.input;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RestInputAddConfiguration {
+public class RestInputAddEmojiConfiguration {
 
     @JsonProperty
     private String channelId;
@@ -13,7 +13,7 @@ public class RestInputAddConfiguration {
     @JsonProperty
     private int repositoryId;
 
-	public RestInputAddConfiguration() {
+	public RestInputAddEmojiConfiguration() {
 	}
 
     public String getChannelId() {

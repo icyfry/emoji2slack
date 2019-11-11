@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Emoji2SlackServlet extends AbstractServlet {
+public class Emoji2SlackRepositorySettingsServlet extends AbstractServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -26,7 +26,7 @@ public class Emoji2SlackServlet extends AbstractServlet {
     private final ApplicationProperties applicationProperties;
 
     @Inject
-    public Emoji2SlackServlet(
+    public Emoji2SlackRepositorySettingsServlet(
         @ComponentImport SoyTemplateRenderer soyTemplateRenderer,
         @ComponentImport RepositoryService repositoryService,
         @ComponentImport ApplicationProperties applicationProperties
@@ -56,12 +56,23 @@ public class Emoji2SlackServlet extends AbstractServlet {
             return;
         }
 
-        // Data sent to soy template
-        Map<String, Object> data = new HashMap<>();
-        data.put("repository", repository);
-        data.put("contextPath", applicationProperties.getBaseUrl(UrlMode.AUTO));
+        if (components.length == 4 && "settings".equalsIgnoreCase(components[3])) {
+            
+            // Data sent to soy template
+            Map<String, Object> data = new HashMap<>();
+            data.put("repository", repository);
+            data.put("contextPath", applicationProperties.getBaseUrl(UrlMode.AUTO));
 
-        render(resp, "emoji2slack.repositorySettings", data);
+            render(resp, "emoji2slack.repositorySettings", data);
+
+        }
+        else {
+
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+
+        }
+        
     }
 
 }

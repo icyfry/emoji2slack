@@ -14,10 +14,12 @@ import com.atlassian.sal.api.ApplicationProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.icyfry.bitbucket.e2s.api.BotService;
-import io.icyfry.bitbucket.e2s.api.Configuration;
 import io.icyfry.bitbucket.e2s.api.Emoji2SlackService;
-import io.icyfry.bitbucket.e2s.api.bot.SlackBotException;
+import io.icyfry.bitbucket.e2s.api.EmojiConfiguration;
+import io.icyfry.bitbucket.e2s.web.input.RestInputAddEmojiConfiguration;
+import io.icyfry.bitbucket.e2s.web.input.RestInputSetGlobalConfiguration;
+import io.icyfry.bitbucket.e2s.web.output.RestResponseAllEmojis;
+import io.icyfry.bitbucket.e2s.web.output.RestResponseConfigurations;
 
 @Path("/")
 @Consumes({ MediaType.APPLICATION_JSON })
@@ -29,14 +31,12 @@ public class Emoji2SlackRestService {
 
     // Internal services
     private final Emoji2SlackService emoji2SlackService;
-    private final BotService botService;
 
     @Inject
     public Emoji2SlackRestService(final Emoji2SlackService emoji2SlackService,
-            final ApplicationProperties applicationProperties, final BotService botService) {
+            final ApplicationProperties applicationProperties) {
         this.emoji2SlackService = checkNotNull(emoji2SlackService);
         this.applicationProperties = checkNotNull(applicationProperties);
-        this.botService = checkNotNull(botService);
     }
 
     /**
@@ -58,19 +58,17 @@ public class Emoji2SlackRestService {
         }
     }
 
-// @PathParam
-
     @GET
-    @Path("configurations/list")
-    public Response getConfigurations(@QueryParam("repositoryid") String repositoryid) {
+    @Path("emojis/configurations/{repositoryid}")
+    public Response getConfigurations(@PathParam("repositoryid") String repositoryid) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            Collection<Configuration> configurations;
+            Collection<EmojiConfiguration> configurations;
             if(repositoryid == null){
-                configurations = emoji2SlackService.getAllConfigurations();
+                configurations = emoji2SlackService.getAllEmojisConfigurations();
             }
             else {
-                configurations = emoji2SlackService.getConfigurationsByRepositoryId(Integer.valueOf(repositoryid));
+                configurations = emoji2SlackService.getEmojisConfigurationsByRepositoryId(Integer.valueOf(repositoryid));
             }
             return Response.ok(objectMapper
                     .writeValueAsString(new RestResponseConfigurations(configurations)))
@@ -82,16 +80,34 @@ public class Emoji2SlackRestService {
     }
 
     @POST
-    @Path("configurations/add")
-    public Response addConfiguration(RestInputAddConfiguration input) {
+    @Path("emojis/configurations/add")
+    public Response addConfiguration(RestInputAddEmojiConfiguration input) {
 
-        emoji2SlackService.saveConfiguration(
+        emoji2SlackService.saveEmojiConfiguration(
             input.getChannelId(), 
             input.getEmojiShortcut(),
             input.getRepositoryId());
 
         return Response.ok("configuration saved").build();
 
+    }
+
+    @POST
+    @Path("configuration")
+    public Response setConfiguration(RestInputSetGlobalConfiguration input) {
+        emoji2SlackService.saveConfiguration(input);
+        return Response.ok("plugin global configuration saved").build();
+    }
+
+    @GET
+    @Path("configuration")
+    public Response getConfiguration() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+            return Response.ok(objectMapper.writeValueAsString(emoji2SlackService.getConfiguration())).build();
+        }catch (JsonProcessingException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
+        }
     }
 
 }

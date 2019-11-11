@@ -15,7 +15,7 @@
       <label for="name">Configuration list</label>
       <ul v-if="configurations && configurations.length">
         <li v-bind:key="item" v-for="item in configurations">
-          <Configuration :channelId="item.channelId" :emoji="item.emoji" />
+          <EmojiConfiguration :channelId="item.channelId" :emoji="item.emoji" />
         </li>
       </ul>
     </div>
@@ -28,7 +28,7 @@
     <div class="field-group">
       <label for="name">Emoji</label>
         <select v-model="emoji" >
-          <option :selected="emoji==c" v-bind:key="c" v-for="(c,shortcut) in emojis" :value="shortcut">{{c}}</option>
+          <option :selected="emoji==c" v-bind:key="c" v-for="(c,shortcut) in emojis" :value="shortcut">{{c}} ({{shortcut}})</option>
         </select>
     </div>
     <va-button @click="saveConfiguration">Save config</va-button>
@@ -55,19 +55,19 @@
 
 import axios from 'axios';
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import Configuration from '@/components/Configuration.vue';
+import EmojiConfiguration from '@/components/EmojiConfiguration.vue';
 
 /* Provided by bitbucket */
 declare var AJS: any;
 
 @Component({
   components: {
-    Configuration,
+    EmojiConfiguration,
   },
 })
-export default class Configurations extends Vue {
+export default class RepositoryEmojisConfigurations extends Vue {
 
-  @Prop() private configurations: Configuration[] = [];
+  @Prop() private configurations: EmojiConfiguration[] = [];
   @Prop() private emojis: any;
   @Prop() private errors: any[] = [];
   @Prop() private infos: any[] = [];
@@ -87,7 +87,7 @@ export default class Configurations extends Vue {
    * Rest call to get configurations of current repository
    */
   public callConfigurations() {
-    axios.get(AJS.contextPath() + `/rest/emoji2slack/1.0/configurations/list?repositoryid=` + this.repositoryId)
+    axios.get(AJS.contextPath() + `/rest/emoji2slack/1.0/emojis/configurations/` + this.repositoryId)
     .then((response) => {
       this.configurations = response.data.configurations;
     })
@@ -114,7 +114,7 @@ export default class Configurations extends Vue {
    * Rest call to save a new configuration
    */
   public saveConfiguration() {
-    axios.post(AJS.contextPath() + `/rest/emoji2slack/1.0/configurations/add`, {
+    axios.post(AJS.contextPath() + `/rest/emoji2slack/1.0/emojis/configurations/add`, {
         channelId: this.channelId,
         emojiShortcut: this.emoji,
         repositoryId: this.repositoryId,
