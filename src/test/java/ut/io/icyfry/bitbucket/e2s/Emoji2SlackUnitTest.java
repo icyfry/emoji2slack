@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import io.icyfry.bitbucket.e2s.api.Emoji2SlackException;
 import io.icyfry.bitbucket.e2s.api.EmojiConfiguration;
 import io.icyfry.bitbucket.e2s.api.bot.SlackBotService;
 import io.icyfry.bitbucket.e2s.impl.Emoji2SlackServiceImpl;
@@ -45,14 +46,25 @@ public class Emoji2SlackUnitTest {
         MockitoAnnotations.initMocks(this);
     }
 
+    @Test(expected = Emoji2SlackException.class) 
+    public void testFindMatchingConfigurationForCommentError() throws Exception{
+
+        Emoji2SlackServiceImpl service = new Emoji2SlackServiceImpl(ao,applicationProperties,botService,emoticonService,pluginSettingsFactory);
+
+        // Should throw error
+        service.findMatchingEmojiConfigurationForComment(new MockComment("..."),null);
+
+    }
+
     @Test
     public void testFindMatchingConfigurationForComment() throws Exception{
 
         Emoji2SlackServiceImpl service = new Emoji2SlackServiceImpl(ao,applicationProperties,botService,emoticonService,pluginSettingsFactory);
 
         // Mock comment
-        MockComment testComment = new MockComment(":clap: Hello");
-        MockComment testComment2 = new MockComment("👏 Hello");
+        MockComment testComment = new MockComment(":clap: Hello"); // comment with shortcut (bitbucket)
+        MockComment testComment2 = new MockComment("👏 Hello");   // comment with char (generic)
+        MockComment testComment3 = new MockComment("no emoji");   // comment with no emoji
 
         // Mock configuration
         Emoticon emoticon = new MockEmoticon("clap","👏");
@@ -69,6 +81,9 @@ public class Emoji2SlackUnitTest {
 
         // Comment 2
         EmojiConfiguration configurationFound2 = service.findMatchingEmojiConfigurationForComment(testComment2,configurations);
+
+        // Comment 3
+        EmojiConfiguration configurationFound3 = service.findMatchingEmojiConfigurationForComment(testComment3,configurations);
         
         assertNotNull(configurationFound);
         assertEquals("👏",configurationFound.getEmoji().getValue().get());
@@ -79,6 +94,8 @@ public class Emoji2SlackUnitTest {
         assertEquals("👏",configurationFound2.getEmoji().getValue().get());
         assertEquals("clap",configurationFound2.getEmoji().getShortcut());
         assertEquals("x",configurationFound2.getChannelId());
+
+        assertNull(configurationFound3);
 
     }
     
