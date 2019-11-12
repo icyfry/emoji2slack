@@ -1,6 +1,7 @@
 package ut.io.icyfry.bitbucket.e2s;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,16 +16,19 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import io.icyfry.bitbucket.e2s.api.Emoji2SlackException;
 import io.icyfry.bitbucket.e2s.api.EmojiConfiguration;
 import io.icyfry.bitbucket.e2s.api.bot.SlackBotService;
+import io.icyfry.bitbucket.e2s.data.EmojiConfigEntity;
 import io.icyfry.bitbucket.e2s.impl.Emoji2SlackServiceImpl;
 
 /**
- * UTs related to the Emoji2Slack plugin
+ * UTs related to the Emoji2Slack main service
  */
-public class Emoji2SlackUnitTest {
+public class Emoji2SlackServiceUnitTest {
 
     @Mock
     private ActiveObjects ao;
@@ -41,25 +45,44 @@ public class Emoji2SlackUnitTest {
     @Mock
     private PluginSettingsFactory pluginSettingsFactory;
 
+    // Service used for tests
+    private Emoji2SlackServiceImpl emoji2SlackService;
+
     @Before
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
+        this.emoji2SlackService = new Emoji2SlackServiceImpl(ao,applicationProperties,botService,emoticonService,pluginSettingsFactory);
+    }
+
+    @Test
+    public void testDeleteEmojiConfiguration() throws Exception{
+
+        // Mock ao.find(...)
+        doAnswer(new Answer<EmojiConfigEntity[]>() {
+            public EmojiConfigEntity[] answer(InvocationOnMock invocation) {
+                EmojiConfigEntity[] tab = new EmojiConfigEntity[1];
+                tab[0] = null;
+                return tab;
+            }
+        }).when(ao).find(any(),any());
+
+        // Mock ao.delete(...)
+        doNothing().when(ao).delete(isA(EmojiConfigEntity.class));
+
+        emoji2SlackService.deleteEmojiConfiguration(1);
+
+        // Nothing to assert
+
     }
 
     @Test(expected = Emoji2SlackException.class) 
     public void testFindMatchingConfigurationForCommentError() throws Exception{
-
-        Emoji2SlackServiceImpl service = new Emoji2SlackServiceImpl(ao,applicationProperties,botService,emoticonService,pluginSettingsFactory);
-
         // Should throw error
-        service.findMatchingEmojiConfigurationForComment(new MockComment("..."),null);
-
+        emoji2SlackService.findMatchingEmojiConfigurationForComment(new MockComment("..."),null);
     }
 
     @Test
     public void testFindMatchingConfigurationForComment() throws Exception{
-
-        Emoji2SlackServiceImpl service = new Emoji2SlackServiceImpl(ao,applicationProperties,botService,emoticonService,pluginSettingsFactory);
 
         // Mock comment
         MockComment testComment = new MockComment(":clap: Hello"); // comment with shortcut (bitbucket)
@@ -77,13 +100,13 @@ public class Emoji2SlackUnitTest {
         // Look if configuration is matching
         
         // Comment 1
-        EmojiConfiguration configurationFound = service.findMatchingEmojiConfigurationForComment(testComment,configurations);
+        EmojiConfiguration configurationFound = emoji2SlackService.findMatchingEmojiConfigurationForComment(testComment,configurations);
 
         // Comment 2
-        EmojiConfiguration configurationFound2 = service.findMatchingEmojiConfigurationForComment(testComment2,configurations);
+        EmojiConfiguration configurationFound2 = emoji2SlackService.findMatchingEmojiConfigurationForComment(testComment2,configurations);
 
         // Comment 3
-        EmojiConfiguration configurationFound3 = service.findMatchingEmojiConfigurationForComment(testComment3,configurations);
+        EmojiConfiguration configurationFound3 = emoji2SlackService.findMatchingEmojiConfigurationForComment(testComment3,configurations);
         
         assertNotNull(configurationFound);
         assertEquals("👏",configurationFound.getEmoji().getValue().get());
@@ -98,5 +121,11 @@ public class Emoji2SlackUnitTest {
         assertNull(configurationFound3);
 
     }
-    
+
+    @Test(expected = NullPointerException.class) 
+    public void testSaveEmojiConfigurationError() throws Exception{
+        // Should throw error
+        emoji2SlackService.saveEmojiConfiguration(null,null,0);
+    }
+
 }
