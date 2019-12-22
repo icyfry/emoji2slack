@@ -9,19 +9,26 @@
     </plugin-info>
 
     <!-- add our i18n resource -->
-    <resource type="i18n" name="i18n" location="emoji2slack"/>
+    <resource type="i18n" name="i18n" location="i18n/emoji2slack" />
     
-    <!-- add our web resources -->
     <web-resource key="emoji2slack-resources" name="emoji2slack Web Resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>
-        <resource type="download" name="emoji2slack.css" location="/css/emoji2slack.css"/>
         <resource type="download" name="emoji2slack.js" location="/js/emoji2slack.js"/>
         <resource type="download" name="images/" location="/images"/>
 
         <!-- Vue.js ressources -->
-        <resource type="download" name="app.css" location="/vue/dist/css/app.css"/>
         <resource type="download" name="app.js" location="/vue/dist/js/app.js"/>
         <resource type="download" name="app.js.map" location="/vue/dist/js/app.js.map"/>
+        
+        <context>emoji2slack</context>
+    </web-resource>
+
+    <web-resource key="emoji2slack-resources-css" name="emoji2slack Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <resource type="download" name="emoji2slack.css" location="/css/emoji2slack.css"/>
+
+        <!-- Vue.js ressources -->
+        <resource type="download" name="app.css" location="/vue/dist/css/app.css"/>
         
         <context>emoji2slack</context>
     </web-resource>
@@ -50,16 +57,14 @@
         <url-pattern>/emoji2slack/*</url-pattern>
     </servlet>
     
-    <web-item key="emoji2slack-repository-settings-tab" name="Repository settings navigation tab" section="bitbucket.repository.settings.panel/repository-workflow-section" weight="50">
-        <label>Slack Integration (Emojis)</label>
+    <web-item key="emoji2slack-repository-settings-tab" name="Repository settings navigation tab" section="bitbucket.repository.settings.panel/repository-workflow-section" weight="40">
+        <label key="emoji2slack.settings.web-item.label"/>
         <link>/plugins/servlet/emoji2slack/project/${repository.project.key}/${repository.slug}/settings</link>
-        <!--<tooltip>emoji2slack</tooltip>-->
     </web-item>
 
     <web-item key="emoji2slack-global-settings-tab" name="Repository settings navigation tab" section="atl.admin/admin-plugins-section" weight="50">
-        <label>Slack Integration (Emojis)</label>
+        <label key="emoji2slack.settings.web-item.label"/>
         <link>/plugins/servlet/emoji2slack/settings</link>
-        <!--<tooltip>emoji2slack</tooltip>-->
     </web-item>
     
 </atlassian-plugin>

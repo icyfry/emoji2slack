@@ -126,25 +126,19 @@ public class Emoji2SlackServiceImpl implements Emoji2SlackService {
         checkNotNull(emojiShortcut);
         checkNotNull(repositoryId);
 
-        try {
+        final EmojiConfigEntity entity = ao.create(EmojiConfigEntity.class, new DBParam("CHANNEL_ID", channelId));
+        
+        entity.setEmojiShortcut(emojiShortcut);
+        entity.setRepositoryId(repositoryId);
+        
+        // Try contacting the channel
+        ChatPostMessageResponse response = botService.getBot(this).sendConfigurationMessage(this.ConfigurationEntityToModel(entity));
 
-            final EmojiConfigEntity entity = ao.create(EmojiConfigEntity.class, new DBParam("CHANNEL_ID", channelId));
-            
-            entity.setEmojiShortcut(emojiShortcut);
-            entity.setRepositoryId(repositoryId);
-            
-            // Try contacting the channel
-            ChatPostMessageResponse response = botService.getBot(this).sendConfigurationMessage(this.ConfigurationEntityToModel(entity));
-
-            if(response.isOk()){
-                entity.save();
-            }
-            else{
-                throw new Emoji2SlackException("Error sending message to Slack");
-            }
-
-        } catch (SlackBotException e) {
-            throw new Emoji2SlackException(e);
+        if(response.isOk()){
+            entity.save();
+        }
+        else{
+            throw new Emoji2SlackException("Error sending message to Slack");
         }
 
     }

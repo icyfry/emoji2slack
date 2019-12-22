@@ -19,8 +19,10 @@ if (document.getElementById('emoji-slack-repository') != null) {
   new Vue({
     router,
     render: (h) => h(Emoji2slackRepository, {
-      props:{ 
-        repositoryId: (document) ? (document.querySelector('#emoji-slack-repository') as any).dataset.repositoryId : null,
+      props: {
+        repositoryId:
+          (document) ?
+            (document.querySelector('#emoji-slack-repository') as any).dataset.repositoryId : null,
       },
     }),
   }).$mount('#emoji-slack-repository');

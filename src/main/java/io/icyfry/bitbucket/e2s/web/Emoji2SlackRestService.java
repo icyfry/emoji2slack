@@ -68,7 +68,7 @@ public class Emoji2SlackRestService {
                     .ok(objectMapper
                             .writeValueAsString(new RestResponseAllEmojis(emoji2SlackService.getAllEmojisAvailables())))
                     .build();
-        } catch (JsonProcessingException e) {
+        } catch (JsonProcessingException|RuntimeException e) {
             return createErrorResponse(e);
         }
     }
@@ -87,7 +87,7 @@ public class Emoji2SlackRestService {
             }
             return Response.ok(objectMapper.writeValueAsString(new RestResponseConfigurations(configurations))).build();
 
-        } catch (JsonProcessingException e) {
+        } catch (JsonProcessingException|RuntimeException e) {
             return createErrorResponse(e);
         }
     }
@@ -105,7 +105,7 @@ public class Emoji2SlackRestService {
 
             return Response.ok("configuration saved").build();
 
-        } catch (Emoji2SlackException e) {
+        } catch (Emoji2SlackException|RuntimeException e) {
             return createErrorResponse(e);
         }
 
@@ -120,7 +120,7 @@ public class Emoji2SlackRestService {
 
             return Response.ok("configuration deleted").build();
 
-        } catch (Emoji2SlackException|NumberFormatException e) {
+        } catch (Emoji2SlackException|RuntimeException e) {
             return createErrorResponse(e);
         }
 
@@ -134,7 +134,7 @@ public class Emoji2SlackRestService {
             emoji2SlackService.saveConfiguration(input);
             return Response.ok("plugin global configuration saved").build();
 
-        } catch (Emoji2SlackException e) {
+        } catch (Emoji2SlackException|RuntimeException e) {
             return createErrorResponse(e);
         }
     }
@@ -144,7 +144,7 @@ public class Emoji2SlackRestService {
     public Response getConfiguration() {
         try {
             return Response.ok(objectMapper.writeValueAsString(emoji2SlackService.getConfiguration())).build();
-        } catch (JsonProcessingException|Emoji2SlackException e) {
+        } catch (JsonProcessingException|Emoji2SlackException|RuntimeException e) {
             return createErrorResponse(e);
         }
     }

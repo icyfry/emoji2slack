@@ -8,6 +8,8 @@ import com.atlassian.bitbucket.comment.Comment;
 import com.atlassian.bitbucket.emoticons.Emoticon;
 import com.atlassian.bitbucket.repository.Repository;
 
+import io.icyfry.bitbucket.e2s.api.bot.SlackBotException;
+
 /**
  * Main Service class for plugin. manage the bot behaviour configuration
  */
@@ -45,6 +47,7 @@ public interface Emoji2SlackService
      * @param channelId the id of the channel to link
      * @param emoji the emoji to link to the channel
      * @param repositoryId the repository related to the configuration
+     * @throws SlackBotException
      */
     public void saveEmojiConfiguration(String channelId, String emojiShortcut, int repositoryId) throws Emoji2SlackException;
    

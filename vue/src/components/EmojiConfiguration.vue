@@ -1,7 +1,6 @@
 <template>
-  <div class="configuration">
-    <b>{{ channelId }}</b>
-    <b>{{ emoji }}</b>
+  <div class="emoji2slack-configuration">
+    <span class="emoji">{{ emoji }}</span><span class="channel">{{ channelId }}</span>
   </div>
 </template>
 
@@ -16,7 +15,21 @@ export default class Configuration extends Vue {
 </script>
 
 <style scoped>
-.configuration {
-  background-color: rgb(129, 129, 129); 
+
+.emoji2slack-configuration {
+  vertical-align: middle;
+  width: fit-content;
+  margin-bottom: 5px;
 }
+
+.emoji2slack-configuration .emoji {
+  font-size: x-large;
+  vertical-align: sub;
+}
+
+.emoji2slack-configuration .channel {
+  margin-left: 15px;
+  font-weight: bold;
+}
+
 </style>
