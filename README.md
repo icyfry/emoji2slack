@@ -1,5 +1,8 @@
 # emoji2slack bitbucket plugin
 
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/icyfry/emoji2slack/Java%20CI)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/icyfry/emoji2slack)
+
 This plugin send messages to slack when an emoji is used in comments in Bitbucket.
 
 1. Configure the token (xoxb-....) of a bot installed on your Slack channel in the global settings of the plugin (bitbucket/plugins/servlet/emoji2slack/settings)
