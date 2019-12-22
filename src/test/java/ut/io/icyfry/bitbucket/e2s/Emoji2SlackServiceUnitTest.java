@@ -5,6 +5,9 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.bitbucket.emoticons.Emoticon;
@@ -126,6 +129,49 @@ public class Emoji2SlackServiceUnitTest {
     public void testSaveEmojiConfigurationError() throws Exception{
         // Should throw error
         emoji2SlackService.saveEmojiConfiguration(null,null,0);
+    }
+
+    @Test
+    public void testGetAllEmojisConfigurations() throws Exception{
+
+        doAnswer(new Answer<Map<String, Emoticon>>() {
+            public Map<String, Emoticon> answer(InvocationOnMock invocation) {
+                Map<String, Emoticon> map = new HashMap<>();
+                map.put("cat",new MockEmoticon("cat","😺"));
+                map.put("clap",new MockEmoticon("clap","👏"));
+                map.put("question",new MockEmoticon("question","❓"));
+                return map;
+            }
+        }).when(emoticonService).getEmoticons();
+
+        doAnswer(new Answer<EmojiConfigEntity[]>() {
+            public EmojiConfigEntity[] answer(InvocationOnMock invocation) {
+                EmojiConfigEntity[] tab = new EmojiConfigEntity[3];
+                tab[0] = new MockEmojiConfigEntity(0,"channel1","clap",0);
+                tab[1] = new MockEmojiConfigEntity(1,"channel2","cat",0);
+                tab[2] = new MockEmojiConfigEntity(2,"channel3","not_exist",0);
+                return tab;
+            }
+        }).when(ao).find(any());
+
+        Collection<EmojiConfiguration> result = emoji2SlackService.getAllEmojisConfigurations();
+
+        assertEquals(result.size(),3);
+
+        Iterator<EmojiConfiguration> itr = result.iterator();
+
+        EmojiConfiguration item1 = itr.next();
+        assertEquals(item1.getId(),0);
+        assertEquals(item1.getEmoji().getValue().get(),"👏");
+
+        EmojiConfiguration item2 = itr.next();
+        assertEquals(item2.getId(),1);
+        assertEquals(item2.getEmoji().getValue().get(),"😺");
+
+        EmojiConfiguration item3 = itr.next();
+        assertEquals(item3.getId(),2);
+        assertEquals(item3.getEmoji().getValue().get(),"❓");
+
     }
 
 }

@@ -98,7 +98,9 @@ public class Emoji2SlackServiceImpl implements Emoji2SlackService {
         return new EmojiConfiguration(
             entity.getID(),
             entity.getChannelId(),
-            this.getAllEmojisAvailables().get(entity.getEmojiShortcut())
+            this.getAllEmojisAvailables().getOrDefault(
+                entity.getEmojiShortcut(), this.emoticonService.getEmoticons().get("question")
+            )
         );
     }
 
