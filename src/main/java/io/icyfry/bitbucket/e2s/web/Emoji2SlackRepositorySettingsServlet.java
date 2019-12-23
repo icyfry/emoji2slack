@@ -53,6 +53,7 @@ public class Emoji2SlackRepositorySettingsServlet extends AbstractServlet {
         // Security check
         if(!authenticationContext.isAuthenticated()) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
         }
 
         // Get repoSlug from path
@@ -77,6 +78,7 @@ public class Emoji2SlackRepositorySettingsServlet extends AbstractServlet {
             // Security check
             if(!permissionService.hasRepositoryPermission(repository, Permission.REPO_ADMIN)){
                 resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
             }
 
             // Data sent to soy template

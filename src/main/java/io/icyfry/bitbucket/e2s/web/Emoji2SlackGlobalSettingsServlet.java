@@ -47,9 +47,11 @@ public class Emoji2SlackGlobalSettingsServlet extends AbstractServlet {
         // Security checks
         if(!authenticationContext.isAuthenticated()) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
         }
         if(!permissionService.hasGlobalPermission(Permission.ADMIN)){
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
         }
 
         // Get repoSlug from path
