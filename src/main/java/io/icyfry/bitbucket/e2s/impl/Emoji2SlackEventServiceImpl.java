@@ -21,7 +21,6 @@ import io.icyfry.bitbucket.e2s.api.Emoji2SlackEventService;
 import io.icyfry.bitbucket.e2s.api.Emoji2SlackException;
 import io.icyfry.bitbucket.e2s.api.Emoji2SlackService;
 import io.icyfry.bitbucket.e2s.api.EmojiConfiguration;
-import io.icyfry.bitbucket.e2s.api.bot.SlackBotException;
 
 @ExportAsService({ Emoji2SlackEventService.class })
 @Named
@@ -78,8 +77,6 @@ public class Emoji2SlackEventServiceImpl implements Emoji2SlackEventService {
                     botService.getBot(this.emoji2SlackService).sendCommentMessage(configuration.getChannelId(),event.getComment());
                 }
 
-            } catch (SlackBotException e) {
-                // TODO Handle error
             } catch (Emoji2SlackException e) {
                 // TODO Handle error
             }

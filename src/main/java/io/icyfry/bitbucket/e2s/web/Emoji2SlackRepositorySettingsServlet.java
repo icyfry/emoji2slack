@@ -1,6 +1,9 @@
 package io.icyfry.bitbucket.e2s.web;
 
 import com.atlassian.soy.renderer.SoyTemplateRenderer;
+import com.atlassian.bitbucket.auth.AuthenticationContext;
+import com.atlassian.bitbucket.permission.Permission;
+import com.atlassian.bitbucket.permission.PermissionService;
 import com.atlassian.bitbucket.repository.Repository;
 import com.atlassian.bitbucket.repository.RepositoryService;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
@@ -25,20 +28,34 @@ public class Emoji2SlackRepositorySettingsServlet extends AbstractServlet {
 
     private final ApplicationProperties applicationProperties;
 
+    private final AuthenticationContext authenticationContext;
+
+    private final PermissionService permissionService;
+
     @Inject
     public Emoji2SlackRepositorySettingsServlet(
         @ComponentImport SoyTemplateRenderer soyTemplateRenderer,
         @ComponentImport RepositoryService repositoryService,
-        @ComponentImport ApplicationProperties applicationProperties
+        @ComponentImport ApplicationProperties applicationProperties,
+        @ComponentImport AuthenticationContext authenticationContext,
+        @ComponentImport PermissionService permissionService
         ) {
         super(soyTemplateRenderer);
         this.repositoryService = checkNotNull(repositoryService);
         this.applicationProperties = checkNotNull(applicationProperties);
+        this.authenticationContext = checkNotNull(authenticationContext);
+        this.permissionService = checkNotNull(permissionService);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         
+        // Security check
+        if(!authenticationContext.isAuthenticated()) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
+
         // Get repoSlug from path
         String pathInfo = req.getPathInfo();
 
@@ -58,6 +75,12 @@ public class Emoji2SlackRepositorySettingsServlet extends AbstractServlet {
 
         if (components.length == 4 && "settings".equalsIgnoreCase(components[3])) {
             
+            // Security check
+            if(!permissionService.hasRepositoryPermission(repository, Permission.REPO_ADMIN)){
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+
             // Data sent to soy template
             Map<String, Object> data = new HashMap<>();
             data.put("repository", repository);

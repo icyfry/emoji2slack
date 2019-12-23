@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-//import RepositoryEmojisConfigurations from './views/RepositoryEmojisConfigurations.vue';
-//import GlobalConfigurations from './views/GlobalConfigurations.vue';
+// import RepositoryEmojisConfigurations from './views/RepositoryEmojisConfigurations.vue';
+// import GlobalConfigurations from './views/GlobalConfigurations.vue';
 import About from './views/About.vue';
 
 Vue.use(Router);

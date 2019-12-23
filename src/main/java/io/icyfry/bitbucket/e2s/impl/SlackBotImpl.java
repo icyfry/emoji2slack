@@ -49,10 +49,13 @@ public class SlackBotImpl implements SlackBot {
             Result<ChatPostMessageResponse, SlackError> postResult = slackClient
                     .postMessage(ChatPostMessageParams.builder().setText(message).setChannelId(channelId).build())
                     .join();
+            if(postResult.isErr()){
+                throw new SlackBotException(postResult.unwrapErrOrElseThrow());
+            }
             return postResult.unwrapOrElseThrow();
         } catch (IllegalStateException e) {
             throw new SlackBotException(e);
-        }
+        } 
     }
 
     @Override

@@ -21,10 +21,15 @@ public class EmojiConfiguration {
     @JsonProperty
     private String channelId;
 
-    public EmojiConfiguration(int id, String channelId, Emoticon emoji) {
+    // id of the repository
+    @JsonProperty
+    private int repositoryId;
+
+    public EmojiConfiguration(int id, String channelId, Emoticon emoji, int repositoryId) {
         this.id = id;
         this.emoji = emoji;
         this.channelId = channelId;
+        this.repositoryId = repositoryId;
     }
 
 	public Emoticon getEmoji() {
@@ -49,6 +54,14 @@ public class EmojiConfiguration {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getRepositoryId() {
+        return repositoryId;
+    }
+
+    public void setRepositoryId(int repositoryId) {
+        this.repositoryId = repositoryId;
     }
 
 }

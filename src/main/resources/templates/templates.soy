@@ -11,10 +11,7 @@
     <meta name="projectKey" content="{$repository.project.key}">
     <meta name="repositorySlug" content="{$repository.slug}">
     <meta name="activeTab" content="repository-settings-plugin-tab">
-    <link href={$contextPath}/download/resources/io.icyfry.bitbucket.emoji2slack:emoji2slack-resources/app.js rel=preload as=script>
-    <link href={$contextPath}/download/resources/io.icyfry.bitbucket.emoji2slack:emoji2slack-resources/app.css rel=preload as=style>
-    <link href={$contextPath}/download/resources/io.icyfry.bitbucket.emoji2slack:emoji2slack-resources/app.css rel=stylesheet>
-    // {webResourceManager_requireResource('io.icyfry.bitbucket.emoji2slack:emoji2slack-resources')}
+    {webResourceManager_requireResource('io.icyfry.bitbucket.emoji2slack:emoji2slack-resources-css')}
     <title>{$repository.slug} / Emojis Slack Integration</title>
 </head>
 <body>
@@ -33,10 +30,7 @@
 <head>
     <meta name="decorator" content="atl.admin">
     <meta name="activeTab" content="emoji2slack-global-settings-tab">
-    <link href={$contextPath}/download/resources/io.icyfry.bitbucket.emoji2slack:emoji2slack-resources/app.js rel=preload as=script>
-    <link href={$contextPath}/download/resources/io.icyfry.bitbucket.emoji2slack:emoji2slack-resources/app.css rel=preload as=style>
-    <link href={$contextPath}/download/resources/io.icyfry.bitbucket.emoji2slack:emoji2slack-resources/app.css rel=stylesheet>
-    // {webResourceManager_requireResource('io.icyfry.bitbucket.emoji2slack:emoji2slack-resources')}
+    {webResourceManager_requireResource('io.icyfry.bitbucket.emoji2slack:emoji2slack-resources-css')}
     <title>Emojis Slack Integration Configuration</title>
 </head>
 <body>

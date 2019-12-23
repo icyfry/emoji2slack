@@ -1,16 +1,29 @@
 # emoji2slack bitbucket plugin
 
-This plugin send messages to slack when an emoji is used in comments in Bitbucket.
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/icyfry/emoji2slack/Java%20CI)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/icyfry/emoji2slack)
 
-1. Configure the token (xoxb-....) of a bot installed on your Slack channel in the global settings of the plugin (bitbucket/plugins/servlet/emoji2slack/settings)
+![Bitbucket version](https://img.shields.io/badge/Bitbucket%20server%20version-6.5.1-blue?logo=Bitbucket)
+
+<b>This plugin send messages to Slack when an emoji is used in comments in Bitbucket.</b>
+
+1. Configure the token (xoxb-....) of a bot installed on your Slack channel in the global settings of the plugin
 2. Link a emoji to a channel in a repository
 3. Write a message on a PR containing the emoji, a message will be send to the channel configured 
 
-> Version 1.0.0 currently under work
-
 ## UI
 
-🎨 The ui is not ready yet
+### Global plugin configuration
+You can configure the link to a bitbucket bot in the administration of Bitbucket
+> Administration / Slack integration (Emojis)
+
+<img src="doc/capture_2.png" style="width:250px"/>
+
+### Pull request configurations
+You can link a channel to a emoji on a specific repository
+> Repository settings / Slack integration (Emojis)
+
+<img src="doc/capture_1.png" style="width:250px"/>
 
 ## API
 
@@ -74,68 +87,6 @@ bitbucket/plugins/servlet/emoji2slack/project/{PROJECT}/{REPOSITORY}/settings
 
 * [slack-client](https://github.com/HubSpot/slack-client)
 * [vue-aui](https://spartez.github.io/vue-aui/#/)
-
-## Developement
-
-> ⚠️ The documentation bellow will be useful if you plan to contribute to the development of the plugin
-
-### Configuration
-
-* Install [java 11](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html) (JDK)
-* Install [Atlassian Plugin SDK](https://marketplace.atlassian.com/apps/1210950/atlassian-plugin-sdk-windows?hosting=server&tab=overview)
-
-### Run the plugin localy
-
-Clear target folder
-```batch
-atlas-clean
-```
-
-Generate the plugin jar and obr
-```batch
-atlas-package
-```
-
-Launch a local instance of Bitbucket to test the plugin
-```batch
-atlas-run --jvmargs '-Xms1g -Xmx2g'
-```
-
-[INFO] bitbucket started successfully in 145s at http://localhost:7990/bitbucket
-
-http://localhost:7990/bitbucket
-with user : **admin** and password : **admin**
-
-Install the plugin
-```batch
-atlas-install-plugin
-```
-
-### IDE (VSCODE)
-
-* https://code.visualstudio.com/docs/languages/java
-* https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack
-
-
-#### Debuging
-
-Add the following remote debug configuration in vscode 
-https://code.visualstudio.com/docs/editor/debugging
-```json
-{
-    "type": "java",
-    "name": "Debug (Attach) - Atlassian",
-    "request": "attach",
-    "hostName": "localhost",
-    "port": 5005
-}
-```
-
-To be able to connect your IDE to the java instance runnig , you have to launch Bitbucet using
-```batch
-atlas-debug
-```
-> ⚠ Debuging is consuming more ressources than standard launch (with ``atlas-run``)
 
 ## References
 

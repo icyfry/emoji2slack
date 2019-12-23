@@ -1,6 +1,9 @@
 package io.icyfry.bitbucket.e2s.web;
 
 import com.atlassian.soy.renderer.SoyTemplateRenderer;
+import com.atlassian.bitbucket.auth.AuthenticationContext;
+import com.atlassian.bitbucket.permission.Permission;
+import com.atlassian.bitbucket.permission.PermissionService;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.sal.api.ApplicationProperties;
 import com.atlassian.sal.api.UrlMode;
@@ -21,17 +24,35 @@ public class Emoji2SlackGlobalSettingsServlet extends AbstractServlet {
 
     private final ApplicationProperties applicationProperties;
 
+    private final AuthenticationContext authenticationContext;
+
+    private final PermissionService permissionService;
+
     @Inject
     public Emoji2SlackGlobalSettingsServlet(
         @ComponentImport SoyTemplateRenderer soyTemplateRenderer,
-        @ComponentImport ApplicationProperties applicationProperties
+        @ComponentImport ApplicationProperties applicationProperties,
+        @ComponentImport AuthenticationContext authenticationContext,
+        @ComponentImport PermissionService permissionService
         ) {
         super(soyTemplateRenderer);
         this.applicationProperties = checkNotNull(applicationProperties);
+        this.authenticationContext = checkNotNull(authenticationContext);
+        this.permissionService = checkNotNull(permissionService);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        // Security checks
+        if(!authenticationContext.isAuthenticated()) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
+        if(!permissionService.hasGlobalPermission(Permission.ADMIN)){
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
 
         // Get repoSlug from path
         String pathInfo = req.getPathInfo();

@@ -27,7 +27,6 @@ import io.icyfry.bitbucket.e2s.api.Emoji2SlackException;
 import io.icyfry.bitbucket.e2s.api.Emoji2SlackService;
 import io.icyfry.bitbucket.e2s.api.EmojiConfiguration;
 import io.icyfry.bitbucket.e2s.api.GlobalConfiguration;
-import io.icyfry.bitbucket.e2s.api.bot.SlackBotException;
 import io.icyfry.bitbucket.e2s.api.bot.SlackBotService;
 import io.icyfry.bitbucket.e2s.data.EmojiConfigEntity;
 import net.java.ao.DBParam;
@@ -98,7 +97,10 @@ public class Emoji2SlackServiceImpl implements Emoji2SlackService {
         return new EmojiConfiguration(
             entity.getID(),
             entity.getChannelId(),
-            this.getAllEmojisAvailables().get(entity.getEmojiShortcut())
+            this.getAllEmojisAvailables().getOrDefault(
+                entity.getEmojiShortcut(), this.emoticonService.getEmoticons().get("question")
+            ),
+            entity.getRepositoryId()
         );
     }
 
@@ -124,25 +126,19 @@ public class Emoji2SlackServiceImpl implements Emoji2SlackService {
         checkNotNull(emojiShortcut);
         checkNotNull(repositoryId);
 
-        try {
+        final EmojiConfigEntity entity = ao.create(EmojiConfigEntity.class, new DBParam("CHANNEL_ID", channelId));
+        
+        entity.setEmojiShortcut(emojiShortcut);
+        entity.setRepositoryId(repositoryId);
+        
+        // Try contacting the channel
+        ChatPostMessageResponse response = botService.getBot(this).sendConfigurationMessage(this.ConfigurationEntityToModel(entity));
 
-            final EmojiConfigEntity entity = ao.create(EmojiConfigEntity.class, new DBParam("CHANNEL_ID", channelId));
-            
-            entity.setEmojiShortcut(emojiShortcut);
-            entity.setRepositoryId(repositoryId);
-            
-            // Try contacting the channel
-            ChatPostMessageResponse response = botService.getBot(this).sendConfigurationMessage(this.ConfigurationEntityToModel(entity));
-
-            if(response.isOk()){
-                entity.save();
-            }
-            else{
-                throw new Emoji2SlackException("Error sending message to Slack");
-            }
-
-        } catch (SlackBotException e) {
-            throw new Emoji2SlackException(e);
+        if(response.isOk()){
+            entity.save();
+        }
+        else{
+            throw new Emoji2SlackException("Error sending message to Slack");
         }
 
     }
@@ -181,6 +177,7 @@ public class Emoji2SlackServiceImpl implements Emoji2SlackService {
         PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
         try {
             pluginSettings.put(PLUGIN_STORAGE_KEY + ".global", objectMapper.writeValueAsString(input));
+            this.botService.restartBot(this);
         } catch (JsonProcessingException e) {
             throw new Emoji2SlackException(e);
         }
@@ -209,6 +206,17 @@ public class Emoji2SlackServiceImpl implements Emoji2SlackService {
 
         return configuration;
 
+    }
+
+    @Override
+    public EmojiConfiguration getEmojiConfiguration(int id) throws Emoji2SlackException {
+        List<EmojiConfigEntity> entities = newArrayList(ao.find(EmojiConfigEntity.class, Query.select().where("ID = " + id)));
+        if(entities.size() == 1){
+            return ConfigurationEntityToModel(entities.get(0));
+        }
+        else{
+            throw new Emoji2SlackException("Error retriving an emoji configuration with id "+id + ", "+entities.size()+" results founds");
+        }
     }
 
     @Override

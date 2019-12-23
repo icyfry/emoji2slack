@@ -1,22 +1,36 @@
 <template>
 
-  <div class="configuration">
+  <div class="emoji2slack-global-configuration">
 
-    <div class="field-group">
-      <label for="name">botAccessToken</label>
-      <input v-model="botAccessToken" />
-    </div>
-    
-    <va-button @click="saveConfiguration">Save config</va-button>
-    
-    <!-- errors -->
+    <header class="aui-page-header">
+      <div class="aui-page-header-inner">
+        <div class="aui-page-header-main">
+          <h2>Emoji-2-Slack Configuration</h2>
+        </div>
+      </div>
+    </header>
+
+    <form class="aui">
+
+      <div class="field-group">
+        <label for="bot-access-token">Bot Access Token</label>
+        <input class="text long-field" type="text" id="bot-access-token" v-model="botAccessToken" />
+      </div>
+
+      <div class="buttons-container">
+        <div class="buttons">
+          <va-button type="primary" @click="saveConfiguration">Save</va-button>
+        </div>
+      </div>
+
+    </form>
+
     <template v-if="errors.length">
       <va-message type="error" v-bind:key="error" v-for="error in errors">
         <p>{{error}}</p>
       </va-message>
     </template>
 
-    <!-- infos -->
     <template v-if="infos.length">
       <va-message v-bind:key="info" v-for="info in infos">
         <p>{{info}}</p>
@@ -45,8 +59,19 @@ export default class GlobalConfiguration extends Vue {
   /**
    * Constructor
    */
-  public mounted() {
+  public created() {
     this.callConfiguration();
+  }
+
+  /**
+   * Handle an error
+   */
+  public handleError(e) {
+      if(e.response.data.message !== null) {
+        this.errors.push(e.response.data.message);
+      } else {
+        this.errors.push(e.message);
+      }
   }
 
   /**
@@ -58,7 +83,7 @@ export default class GlobalConfiguration extends Vue {
       this.botAccessToken = response.data.botAccessToken;
     })
     .catch((e) => {
-      this.errors.push(e.message);
+      this.handleError(e);
     });
   }
 
@@ -67,14 +92,14 @@ export default class GlobalConfiguration extends Vue {
    */
   public saveConfiguration() {
     axios.post(AJS.contextPath() + `/rest/emoji2slack/1.0/configuration`, {
-        botAccessToken: this.botAccessToken
+        botAccessToken: this.botAccessToken,
     })
     .then((response) => {
       this.infos.push(`Configuration saved`);
       this.callConfiguration();
     })
     .catch((e) => {
-      this.errors.push(e.message);
+      this.handleError(e);
     });
   }
 
@@ -82,7 +107,9 @@ export default class GlobalConfiguration extends Vue {
 </script>
 
 <style>
-.configuration {
+
+.emoji2slack-global-configuration {
   width: 100%;
 }
+
 </style>

@@ -1,6 +1,6 @@
 <template>
 
-  <div class="configurations">
+  <div class="emoji2slack-repository-configuration">
 
     <header class="aui-page-header">
       <div class="aui-page-header-inner">
@@ -11,37 +11,51 @@
       </div>
     </header>
 
-    <div class="field-group">
-      <label for="name">Configuration list</label>
-      <ul v-if="configurations && configurations.length">
-        <li v-bind:key="item" v-for="item in configurations">
-          <EmojiConfiguration :channelId="item.channelId" :emoji="item.emoji" />
-          <va-button @click="deleteConfiguration(item.id)">delete</va-button>
-        </li>
-      </ul>
-    </div>
+    <form class="aui">
 
-    <h4>Add a new configuration</h4>
-    <div class="field-group">
-      <label for="name">Channel</label>
-      <input v-model="channelId" />
-    </div>
-    <div class="field-group">
-      <label for="name">Emoji</label>
-        <select v-model="emoji" >
-          <option :selected="emoji==c" v-bind:key="c" v-for="(c,shortcut) in emojis" :value="shortcut">{{c}} ({{shortcut}})</option>
-        </select>
-    </div>
-    <va-button @click="saveConfiguration">Save config</va-button>
-    
-    <!-- errors -->
+      <h4>Configurations list</h4>
+      <div>
+        <div class="field-group ">
+          <ul id="emojis-configurations" v-if="!loadingConfigurations">
+            <li v-bind:key="item" v-for="item in configurations">
+              <EmojiConfiguration :channelId="item.channelId" :emoji="item.emoji" />
+              <va-button v-on:click="deleteConfiguration(item.id)">delete</va-button>
+            </li>
+          </ul>
+          <aui-spinner v-else size="medium"></aui-spinner>
+        </div>
+      </div>
+
+      <h4>New configuration</h4>
+      <div v-if="emojis">
+        <div class="field-group">
+          <label for="name">Channel</label>
+          <input placeholder="#channel"  class="text" type="text" v-model="channelId" />
+        </div>
+        <div class="field-group">
+          <label for="name">Emoji</label>
+            <select  id="emoji-select" v-model="emoji" >
+              <option v-bind:key="c" v-for="(c,shortcut) in emojis" :value="shortcut">{{c}}</option>
+            </select>
+        </div>
+        <div class="buttons-container">
+          <div class="buttons">
+            <va-button v-on:click="saveConfiguration()">Save configuration</va-button>
+          </div>
+        </div>        
+      </div>
+      <div v-else class="field-group">
+        <aui-spinner size="small"></aui-spinner>
+      </div>
+
+    </form>
+
     <template v-if="errors.length">
       <va-message type="error" v-bind:key="error" v-for="error in errors">
         <p>{{error}}</p>
       </va-message>
     </template>
 
-    <!-- infos -->
     <template v-if="infos.length">
       <va-message v-bind:key="info" v-for="info in infos">
         <p>{{info}}</p>
@@ -72,28 +86,43 @@ export default class RepositoryEmojisConfigurations extends Vue {
   @Prop() private emojis: any;
   @Prop() private errors: any[] = [];
   @Prop() private infos: any[] = [];
-  @Prop() private channelId: string = `#fakechannel`;
-  @Prop() private emoji: string = `smile_cat`;
+  @Prop() private channelId: string = ``;
+  @Prop() private emoji: string = `cat`;
   @Prop() private repositoryId!: string;
+  @Prop() private loadingConfigurations: boolean = false;
 
   /**
-   * Constructor
+   * Initialize
    */
-  public mounted() {
+  public created() {
     this.callConfigurations();
     this.callEmoji();
   }
 
   /**
+   * Handle an error
+   */
+  public handleError(e) {
+      if(e.response.data.message !== null) {
+        this.errors.push(e.response.data.message);
+      } else {
+        this.errors.push(e.message);
+      }
+  }
+
+  /**
    * Rest call to get configurations of current repository
    */
-  public callConfigurations() {
+ public callConfigurations() {
+    this.loadingConfigurations = true;
     axios.get(AJS.contextPath() + `/rest/emoji2slack/1.0/emojis/configurations/` + this.repositoryId)
     .then((response) => {
+      this.loadingConfigurations = false;
       this.configurations = response.data.configurations;
     })
     .catch((e) => {
-      this.errors.push(e.message);
+      this.loadingConfigurations = false;
+      this.handleError(e);
     });
   }
 
@@ -104,10 +133,9 @@ export default class RepositoryEmojisConfigurations extends Vue {
     axios.get(AJS.contextPath() + `/rest/emoji2slack/1.0/emojis`)
     .then((response) => {
       this.emojis = response.data.emojis;
-      this.emoji = this.emojis[0];
     })
     .catch((e) => {
-      this.errors.push(e.message);
+      this.handleError(e);
     });
   }
 
@@ -121,11 +149,11 @@ export default class RepositoryEmojisConfigurations extends Vue {
         repositoryId: this.repositoryId,
     })
     .then((response) => {
-      this.infos.push(`Configuration saved`);
+      // this.infos.push(`Configuration saved`);
       this.callConfigurations();
     })
     .catch((e) => {
-      this.errors.push(e.message);
+      this.handleError(e);
     });
   }
 
@@ -135,11 +163,11 @@ export default class RepositoryEmojisConfigurations extends Vue {
   public deleteConfiguration(id) {
     axios.delete(AJS.contextPath() + `/rest/emoji2slack/1.0/emojis/configuration/` + id)
     .then((response) => {
-      this.infos.push(`Configuration deleted`);
+      // this.infos.push(`Configuration deleted`);
       this.callConfigurations();
     })
     .catch((e) => {
-      this.errors.push(e.message);
+      this.handleError(e);
     });
   }
 
@@ -147,7 +175,23 @@ export default class RepositoryEmojisConfigurations extends Vue {
 </script>
 
 <style>
-.configurations {
+
+.emoji2slack-repository-configuration {
   width: 100%;
 }
+
+.emoji2slack-repository-configuration #emoji-select {
+  font-size: large;
+  height: 50px;
+  border-color: #dfe1e6;
+}
+
+.emoji2slack-repository-configuration #emojis-configurations {
+  list-style: none;
+}
+
+.emoji2slack-repository-configuration #emojis-configurations li {
+  margin: 12px;
+}
+
 </style>
