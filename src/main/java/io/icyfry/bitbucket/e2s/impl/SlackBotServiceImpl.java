@@ -32,6 +32,14 @@ public class SlackBotServiceImpl implements SlackBotService {
         return bot;
     }
 
+    @Override
+    public void restartBot(Emoji2SlackService emoji2SlackService) throws SlackBotException, Emoji2SlackException {
+        if (bot != null) {
+            bot.stop();
+        }
+        bot = createBot(emoji2SlackService);
+    }
+
     /**
      * Create a new Slack Bot instance
      * 

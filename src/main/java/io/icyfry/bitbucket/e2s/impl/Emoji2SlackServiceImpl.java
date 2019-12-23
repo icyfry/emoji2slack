@@ -27,7 +27,6 @@ import io.icyfry.bitbucket.e2s.api.Emoji2SlackException;
 import io.icyfry.bitbucket.e2s.api.Emoji2SlackService;
 import io.icyfry.bitbucket.e2s.api.EmojiConfiguration;
 import io.icyfry.bitbucket.e2s.api.GlobalConfiguration;
-import io.icyfry.bitbucket.e2s.api.bot.SlackBotException;
 import io.icyfry.bitbucket.e2s.api.bot.SlackBotService;
 import io.icyfry.bitbucket.e2s.data.EmojiConfigEntity;
 import net.java.ao.DBParam;
@@ -178,6 +177,7 @@ public class Emoji2SlackServiceImpl implements Emoji2SlackService {
         PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
         try {
             pluginSettings.put(PLUGIN_STORAGE_KEY + ".global", objectMapper.writeValueAsString(input));
+            this.botService.restartBot(this);
         } catch (JsonProcessingException e) {
             throw new Emoji2SlackException(e);
         }
