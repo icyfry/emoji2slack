@@ -74,6 +74,14 @@ public interface Emoji2SlackService
     public GlobalConfiguration getConfiguration() throws Emoji2SlackException;
 
     /**
+     * Retrive a emoji configuration with it's id 
+     * @param id id of the configuration
+     * @return the configuration
+     * @throws Emoji2SlackException
+     */
+    public EmojiConfiguration getEmojiConfiguration(int id) throws Emoji2SlackException;
+
+    /**
      * Delete a emoji configuration
      * @param id the id of the configuration to delete
      */

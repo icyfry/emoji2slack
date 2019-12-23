@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class GlobalConfiguration {
 
-    // slack bot token
+    // Slack bot token
     @JsonProperty
     private String botAccessToken;
     

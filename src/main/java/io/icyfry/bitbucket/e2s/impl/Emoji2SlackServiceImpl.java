@@ -100,7 +100,8 @@ public class Emoji2SlackServiceImpl implements Emoji2SlackService {
             entity.getChannelId(),
             this.getAllEmojisAvailables().getOrDefault(
                 entity.getEmojiShortcut(), this.emoticonService.getEmoticons().get("question")
-            )
+            ),
+            entity.getRepositoryId()
         );
     }
 
@@ -205,6 +206,17 @@ public class Emoji2SlackServiceImpl implements Emoji2SlackService {
 
         return configuration;
 
+    }
+
+    @Override
+    public EmojiConfiguration getEmojiConfiguration(int id) throws Emoji2SlackException {
+        List<EmojiConfigEntity> entities = newArrayList(ao.find(EmojiConfigEntity.class, Query.select().where("ID = " + id)));
+        if(entities.size() == 1){
+            return ConfigurationEntityToModel(entities.get(0));
+        }
+        else{
+            throw new Emoji2SlackException("Error retriving an emoji configuration with id "+id + ", "+entities.size()+" results founds");
+        }
     }
 
     @Override
