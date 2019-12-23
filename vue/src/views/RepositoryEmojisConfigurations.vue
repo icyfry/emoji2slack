@@ -103,10 +103,9 @@ export default class RepositoryEmojisConfigurations extends Vue {
    * Handle an error
    */
   public handleError(e) {
-      if(e.response.data.message !== null){
+      if(e.response.data.message !== null) {
         this.errors.push(e.response.data.message);
-      }
-      else{
+      } else {
         this.errors.push(e.message);
       }
   }
