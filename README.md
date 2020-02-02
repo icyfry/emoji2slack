@@ -1,8 +1,6 @@
-# emoji2slack bitbucket plugin
-
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/icyfry/emoji2slack/Java%20CI)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/icyfry/emoji2slack)
-
+# emoji2slack Bitbucket plugin
+![GitHub Workflow Status](https://github.com/icyfry/emoji2slack/workflows/Java%20CI/badge.svg)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/icyfry/emoji2slack?include_prereleases&sort=semver)
 ![Bitbucket version](https://img.shields.io/badge/Bitbucket%20server%20version-6.5.1-blue?logo=Bitbucket)
 
 <b>This plugin send messages to Slack when an emoji is used in comments in Bitbucket.</b>
@@ -17,13 +15,13 @@
 You can configure the link to a bitbucket bot in the administration of Bitbucket
 > Administration / Slack integration (Emojis)
 
-<img src="doc/capture_2.png" style="width:250px"/>
+![capture_2](doc/capture_2.png)
 
 ### Pull request configurations
 You can link a channel to a emoji on a specific repository
 > Repository settings / Slack integration (Emojis)
 
-<img src="doc/capture_1.png" style="width:250px"/>
+![capture_1](doc/capture_1.png)
 
 ## API
 

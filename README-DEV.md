@@ -34,6 +34,14 @@ Install the plugin
 atlas-install-plugin
 ```
 
+## Deploy
+
+[How to setup Maven to use deploy](https://help.github.com/en/github/managing-packages-with-github-packages/configuring-apache-maven-for-use-with-github-packages)
+
+```batch
+atlas-mvn deploy
+```
+
 ## IDE (VSCODE)
 
 * https://code.visualstudio.com/docs/languages/java
