@@ -14,6 +14,6 @@ jobs:
       with:
         java-version: '11.0.4'
     - name: Deploy with Maven
-      run: mvn --settings .github/workflows/settings.xml -B deploy --file pom.xml -Dregistry=https://maven.pkg.github.com/icyfry -Dtoken={{ secrets.GITHUB_TOKEN }}
+      run: mvn -Dregistry=https://maven.pkg.github.com/icyfry -Dtoken={{ secrets.GITHUB_TOKEN }} --settings .github/workflows/settings.xml -B deploy --file pom.xml
 
 
