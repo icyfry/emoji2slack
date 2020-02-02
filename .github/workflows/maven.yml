@@ -17,4 +17,4 @@ jobs:
     - name: Build with Maven
       run: mvn --settings .github/workflows/settings.xml -B package --file pom.xml
     - name: Deploy with Maven
-      run: mvn -Dregistry=https://maven.pkg.github.com/icyfry/emoji2slack -Dtoken=${{ secrets.GITHUB_TOKEN }} --settings .github/workflows/settings.xml -B deploy --file pom.xml
+      run: mvn -Dregistry=https://maven.pkg.github.com/icyfry -Dtoken=${{ secrets.GITHUB_TOKEN }} --settings .github/workflows/settings.xml -B deploy --file pom.xml
