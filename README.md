@@ -1,6 +1,7 @@
-# emoji2slack Bitbucket plugin
+# Emoji2Slack Bitbucket plugin
 ![GitHub Workflow Status](https://github.com/icyfry/emoji2slack/workflows/Java%20CI/badge.svg)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/icyfry/emoji2slack?include_prereleases&sort=semver)
+![Licence](https://img.shields.io/github/license/icyfry/emoji2slack)
 ![Bitbucket version](https://img.shields.io/badge/Bitbucket%20server%20version-6.5.1-blue?logo=Bitbucket)
 
 <b>This plugin send messages to Slack when an emoji is used in comments in Bitbucket.</b>
