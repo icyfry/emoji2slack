@@ -3,7 +3,7 @@ name: Java CI
 on: [push]
 
 jobs:
-  
+
   build:
 
     runs-on: ubuntu-latest
@@ -30,4 +30,4 @@ jobs:
           with:
             java-version: '11.0.4'
         - name: Deploy with Maven
-          run: mvn -Dregistry=https://maven.pkg.github.com/icyfry -Dtoken=${{ secrets.GITHUB_TOKEN }} --settings .github/workflows/settings.xml -B deploy --file pom.xml
+          run: mvn -Dregistry=https://maven.pkg.github.com/icyfry/emoji2slack -Dtoken=${{ secrets.GITHUB_TOKEN }} --settings .github/workflows/settings.xml -B deploy --file pom.xml
