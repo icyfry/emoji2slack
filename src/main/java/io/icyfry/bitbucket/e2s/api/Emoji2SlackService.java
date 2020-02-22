@@ -45,31 +45,33 @@ public interface Emoji2SlackService
     /**
      * Save a new configuration
      * @param channelId the id of the channel to link
-     * @param emoji the emoji to link to the channel
+     * @param emojiShortcut the emoji to link to the channel
      * @param repositoryId the repository related to the configuration
-     * @throws SlackBotException
+     * @throws SlackBotException error
      */
     public void saveEmojiConfiguration(String channelId, String emojiShortcut, int repositoryId) throws Emoji2SlackException;
    
     /**
      * Look if the comment contains an emoji linked to a channel in the plugin
-     * configurations.
-     * 
+     * configurations
      * @param comment the comment to look at
+     * @param configurations the configurations to look at
      * @return the matching configuration, else return null
+     * @throws Emoji2SlackException error
      */
     public EmojiConfiguration findMatchingEmojiConfigurationForComment(Comment comment, Collection<EmojiConfiguration> configurations) throws Emoji2SlackException;
 
     /**
      * Save global configuration of the plugin
      * @param input the global configuration to save
-     * @throws Emoji2SlackException
+     * @throws Emoji2SlackException error
      */
     public void saveConfiguration(GlobalConfiguration input) throws Emoji2SlackException;
     
     /**
      * Return the global configuration of the plugin
-     * @throws Emoji2SlackException
+     * @return the plugin configuration
+     * @throws Emoji2SlackException error
      */
     public GlobalConfiguration getConfiguration() throws Emoji2SlackException;
 
@@ -77,13 +79,14 @@ public interface Emoji2SlackService
      * Retrive a emoji configuration with it's id 
      * @param id id of the configuration
      * @return the configuration
-     * @throws Emoji2SlackException
+     * @throws Emoji2SlackException error
      */
     public EmojiConfiguration getEmojiConfiguration(int id) throws Emoji2SlackException;
 
     /**
      * Delete a emoji configuration
      * @param id the id of the configuration to delete
+     * @throws Emoji2SlackException error
      */
 	public void deleteEmojiConfiguration(int id) throws Emoji2SlackException;
 

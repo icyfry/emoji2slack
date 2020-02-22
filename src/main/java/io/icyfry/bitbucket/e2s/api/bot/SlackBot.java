@@ -12,7 +12,7 @@ public interface SlackBot {
 
     /**
      * Stop the Bot
-     * @throws Emoji2SlackBotException
+     * @throws SlackBotException error
      */
     public void stop() throws SlackBotException;
     
@@ -21,7 +21,7 @@ public interface SlackBot {
      * @param channelId the id of the Slack channel
      * @param message the message to send
      * @return Slack response
-     * @throws Emoji2SlackBotException
+     * @throws SlackBotException error
      */
     public ChatPostMessageResponse sendMessage(String channelId, String message) throws SlackBotException;
 
@@ -29,7 +29,7 @@ public interface SlackBot {
      * Send a message to slack regarding a configuation
      * @param emojiConfiguration the configuration
      * @return Slack response
-     * @throws SlackBotException
+     * @throws SlackBotException error
      */
     public ChatPostMessageResponse sendConfigurationMessage(EmojiConfiguration emojiConfiguration) throws SlackBotException;
 
@@ -38,7 +38,7 @@ public interface SlackBot {
      * @param channelId the id of the Slack channel
      * @param comment the comment to send
      * @return Slack response
-     * @throws SlackBotException
+     * @throws SlackBotException error
      */
     public ChatPostMessageResponse sendCommentMessage(String channelId, Comment comment) throws SlackBotException;
 
