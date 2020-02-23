@@ -5,6 +5,7 @@
 .factorypath
 target
 npm
+dev/*.sh
 
 # vue dist files (copy)
 src/main/resources/vue/*

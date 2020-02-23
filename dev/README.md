@@ -21,7 +21,7 @@ atlas-package
 
 Launch a local instance of Bitbucket to test the plugin
 ```batch
-atlas-run --jvmargs '-Xms1g -Xmx2g'
+atlas-run
 ```
 
 [INFO] bitbucket started successfully in 145s at http://localhost:7990/bitbucket
