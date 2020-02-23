@@ -7,3 +7,6 @@ npm
 
 # vue dist files (copy)
 src/main/resources/vue/*
+
+# generated files
+doc/javadoc

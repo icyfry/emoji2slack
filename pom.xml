@@ -31,6 +31,7 @@
         <com.vdurmont.emoji-java.version>5.1.1</com.vdurmont.emoji-java.version>
         <com.atlassian.bitbucket.server.emoticons>5.16.2</com.atlassian.bitbucket.server.emoticons>
         <ao.version>1.2.3</ao.version>
+        <swagger.version>2.1.1</swagger.version>
     </properties>
 
     <dependencyManagement>
@@ -168,8 +169,23 @@
             <artifactId>soy-template-renderer-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-jaxrs2</artifactId>
+            <version>${swagger.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                    <artifactId>jackson-jaxrs-json-provider</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -293,10 +309,7 @@
                         <Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key>
 
                         <!-- Add package to export here -->
-                        <Export-Package>
-                            io.icyfry.bitbucket.e2s.api.*,
-                            com.hubspot.slack.client.models.*,
-                        </Export-Package>
+                        <Export-Package></Export-Package>
 
                         <!-- Add package import here -->
                         <Import-Package>
@@ -311,6 +324,9 @@
                             org.jboss.marshalling.*;resolution:="optional",
                             org.joda.convert.*;resolution:="optional",
                             sun.misc.*;resolution:="optional",
+                            com.sun.jdi.*;resolution:="optional",
+                            com.hubspot.algebra.*;resolution:="optional",
+                            com.hubspot.slack.client.*;resolution:="optional",
                             sun.security.util.*;resolution:="optional",
                             sun.security.x509.*;resolution:="optional",
                             com.atlassian.soy.renderer.SoyTemplateRenderer;resolution:="optional",
@@ -366,6 +382,46 @@
                         </configuration>
                         <goals>
                             <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <destDir>${basedir}/doc/javadoc</destDir>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.openapitools.swagger</groupId>
+                <artifactId>swagger-maven-plugin</artifactId>
+                <version>2.1.2</version>
+                <configuration>
+                  <resourcePackages>
+                    <resourcePackage>io.icyfry.bitbucket.e2s.web</resourcePackage>
+                    <resourcePackage>io.icyfry.bitbucket.e2s.web.input</resourcePackage>
+                    <resourcePackage>io.icyfry.bitbucket.e2s.web.output</resourcePackage>
+                    <resourcePackage>io.icyfry.bitbucket.e2s.api</resourcePackage>
+                  </resourcePackages>
+                  <outputDirectory>${basedir}/doc</outputDirectory>
+                  <outputFilename>swagger</outputFilename>
+                  <outputFormats>YAML</outputFormats>
+                  <prettyPrint>true</prettyPrint>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
                         </goals>
                     </execution>
                 </executions>

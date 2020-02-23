@@ -1,0 +1,152 @@
+openapi: 3.0.1
+info:
+  title: Emoji2Slack API
+  description: Emoji2Slack Bitbucket plugin operations
+  version: "1.0"
+paths:
+  /configuration:
+    get:
+      summary: Return the global configuration of the plugin
+      operationId: getConfiguration
+      responses:
+        default:
+          description: The global configuration of the plugin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalConfiguration'
+    post:
+      summary: Modify the global configuration of the plugin
+      operationId: setConfiguration
+      requestBody:
+        description: The new configuration
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestInputSetGlobalConfiguration'
+        required: true
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /emojis/configurations/{repositoryid}:
+    get:
+      summary: Return the emojis configurations related to the plugin on a specific
+        repository
+      operationId: getConfigurations
+      parameters:
+      - name: repositoryid
+        in: path
+        description: The id of the repository
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: The configurations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponseConfigurations'
+  /emojis/configurations/add:
+    post:
+      summary: Add a new emoji configuration
+      operationId: addConfiguration
+      requestBody:
+        description: The configuration to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestInputAddEmojiConfiguration'
+        required: true
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /emojis/configuration/{id}:
+    delete:
+      summary: Delete a emoji configuration (with internal id)
+      operationId: addConfiguration_1
+      parameters:
+      - name: id
+        in: path
+        description: The id of the configuration to delete
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /emojis:
+    get:
+      summary: Return the list of all emojis
+      operationId: getAllEmojis
+      responses:
+        default:
+          description: The list of all emojis
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emojis'
+components:
+  schemas:
+    GlobalConfiguration:
+      type: object
+      properties:
+        botAccessToken:
+          type: string
+    RestInputSetGlobalConfiguration:
+      type: object
+      properties:
+        botAccessToken:
+          type: string
+    EmojiConfiguration:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        emoji:
+          $ref: '#/components/schemas/Emoticon'
+        channelId:
+          type: string
+        repositoryId:
+          type: integer
+          format: int32
+    Emoticon:
+      type: object
+      properties:
+        value:
+          type: string
+        url:
+          type: string
+        shortcut:
+          type: string
+    RestResponseConfigurations:
+      type: object
+      properties:
+        configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmojiConfiguration'
+    RestInputAddEmojiConfiguration:
+      type: object
+      properties:
+        channelId:
+          type: string
+        emojiShortcut:
+          type: string
+        repositoryId:
+          type: integer
+          format: int32
+    emojis:
+      type: object
+      properties:
+        emojis:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Emoticon'

@@ -26,51 +26,12 @@ You can link a channel to a emoji on a specific repository
 
 ## API
 
-Return the list of all emojis
-```
-GET
-/bitbucket/rest/emoji2slack/latest/emojis
-```
+> [API description of Emoji2Slack in YAML (OpenAPI V3)](doc/swagger.yaml)
 
-Return the emojis configurations related to the plugin on a specific repository
-```
-GET
-/bitbucket/rest/emoji2slack/latest/emojis/configurations/{repositoryid}
-```
+See specifications at https://github.com/OAI/OpenAPI-Specification and view with  https://editor.swagger.io/
 
-Add a new emoji configuration
-```
-POST
-/bitbucket/rest/emoji2slack/latest/emojis/configurations/add
-```
 
-```json
-{
-    "channelId": "string",
-    "emojiShortcut": "string",
-    "repositoryId": "int"
-}
-```
-
-Delete a emoji configuration (with internal id)
-```
-DELETE
-/bitbucket/rest/emoji2slack/latest/emojis/configurations/{id}
-```
-
-Retrive or modify global configuration of the plugin
-```
-GET or POST
-/bitbucket/rest/emoji2slack/latest/configuration
-```
-
-```json
-{
-    "botAccessToken": "string"
-}
-```
-
-## Pages
+## Webpages
 
 Global configuration page
 ```

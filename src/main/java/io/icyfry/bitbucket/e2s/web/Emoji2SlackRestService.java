@@ -26,8 +26,22 @@ import io.icyfry.bitbucket.e2s.web.input.RestInputAddEmojiConfiguration;
 import io.icyfry.bitbucket.e2s.web.input.RestInputSetGlobalConfiguration;
 import io.icyfry.bitbucket.e2s.web.output.RestResponseAllEmojis;
 import io.icyfry.bitbucket.e2s.web.output.RestResponseConfigurations;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.responses.*;
+import io.swagger.v3.oas.annotations.media.*;
+
 
 @Path("/")
+@OpenAPIDefinition(
+    info = @Info(
+        description = "Emoji2Slack Bitbucket plugin operations",
+        title = "Emoji2Slack API",
+        version = "1.0"
+    )
+)
 @Consumes({ MediaType.APPLICATION_JSON })
 @Produces({ MediaType.APPLICATION_JSON })
 public class Emoji2SlackRestService {
@@ -107,6 +121,16 @@ public class Emoji2SlackRestService {
      */
     @GET
     @Path("emojis")
+    @Operation(summary = "Return the list of all emojis",
+        responses = {
+            @ApiResponse(
+                description = "The list of all emojis",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestResponseAllEmojis.class))
+                )
+        }
+    )
     public Response getAllEmojis() {
         try {
             checkSecurity(Permission.LICENSED_USER);
@@ -121,7 +145,17 @@ public class Emoji2SlackRestService {
 
     @GET
     @Path("emojis/configurations/{repositoryid}")
-    public Response getConfigurations(@PathParam("repositoryid") String repositoryid) {
+    @Operation(summary = "Return the emojis configurations related to the plugin on a specific repository",
+        responses = {
+            @ApiResponse(
+                description = "The configurations",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestResponseConfigurations.class))
+                )
+        }
+    )
+    public Response getConfigurations(@Parameter(description = "The id of the repository", required = false) @PathParam("repositoryid") String repositoryid) {
         try {
 
             checkSecurity(Permission.REPO_ADMIN,Integer.valueOf(repositoryid));
@@ -144,7 +178,8 @@ public class Emoji2SlackRestService {
 
     @POST
     @Path("emojis/configurations/add")
-    public Response addConfiguration(RestInputAddEmojiConfiguration input) {
+    @Operation(summary = "Add a new emoji configuration")
+    public Response addConfiguration(@Parameter(description = "The configuration to add", required = true) RestInputAddEmojiConfiguration input) {
         try {
 
             checkSecurity(Permission.REPO_ADMIN,Integer.valueOf(input.getRepositoryId()));
@@ -165,7 +200,8 @@ public class Emoji2SlackRestService {
 
     @DELETE
     @Path("emojis/configuration/{id}")
-    public Response addConfiguration(@PathParam("id") String id) {
+    @Operation(summary = "Delete a emoji configuration (with internal id)")
+    public Response addConfiguration(@Parameter(description = "The id of the configuration to delete", required = true) @PathParam("id") String id) {
         try {
 
             // Security check
@@ -183,7 +219,8 @@ public class Emoji2SlackRestService {
 
     @POST
     @Path("configuration")
-    public Response setConfiguration(RestInputSetGlobalConfiguration input) {
+    @Operation(summary = "Modify the global configuration of the plugin")
+    public Response setConfiguration(@Parameter(description = "The new configuration", required = true) RestInputSetGlobalConfiguration input) {
         try{
 
             checkSecurity(Permission.ADMIN);
@@ -199,6 +236,16 @@ public class Emoji2SlackRestService {
 
     @GET
     @Path("configuration")
+    @Operation(summary = "Return the global configuration of the plugin",
+        responses = {
+            @ApiResponse(
+                description = "The global configuration of the plugin",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = GlobalConfiguration.class))
+                )
+        }
+    )
     public Response getConfiguration() {
         try {
 
