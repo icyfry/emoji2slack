@@ -1,3 +1,5 @@
+> This repository is archived as the plugin is discontinued
+
 # emoji2slack Bitbucket plugin
 ![GitHub Workflow Status](https://github.com/icyfry/emoji2slack/workflows/Java%20CI/badge.svg)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/icyfry/emoji2slack?include_prereleases&sort=semver)
